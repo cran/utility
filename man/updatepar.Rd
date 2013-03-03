@@ -1,32 +1,28 @@
-\name{evaluate}
+\name{updatepar}
 
-\alias{evaluate}
+\alias{updatepar}
 
-\title{Evaluate Node and Associated Hierarchy}
+\title{Update Parameters in Node Definitions}
 
 \description{
-Generic function to calculate values or utilities at all nodes of a hierarchy 
-for given levels of the attributes.
+Generic function to update parameters in all node defintions of the hierarchy defined by the given node.
 }
 
 \usage{
-evaluate(x, ...)
+updatepar(x, ...)
 }
 
 \arguments{
   \item{x}{
-node to be evaluated.
+node to be updated.
 }
-\item{...}{
-attribute levels have to be provided as an additional argument \code{attrib};
-parameter values can optionally be provided as an additional argument \code{par}.
+  \item{...}{
+parameter values can be provided by an additional argument \code{par}.
 }
 }
 
 \value{
-Data frame with results of values or utilities 
-at all nodes of the hierarchy 
-for all provided sets of attribute levels.
+The node or node hierarchy with updated parameters is returned.
 }
 
 \references{
@@ -52,12 +48,16 @@ See \cr\cr
 \code{\link{utility.aggregation.create}}, \cr
 \code{\link{utility.conversion.intpol.create}}, \cr
 \code{\link{utility.conversion.parfun.create}} \cr\cr
-to create the nodes to be evaluated.
+for how to construct the nodes and \cr\cr
+\code{\link{updatepar.utility.endnode.discrete}} \cr
+\code{\link{updatepar.utility.endnode.intpol1d}} \cr
+\code{\link{updatepar.utility.endnode.parfun1d}} \cr
+\code{\link{updatepar.utility.endnode.intpol2d}} \cr
+\code{\link{updatepar.utility.endnode.cond}} \cr
+\code{\link{updatepar.utility.aggregation}} \cr
+\code{\link{updatepar.utility.conversion.intpol}} \cr
+\code{\link{updatepar.utility.conversion.parfun}} \cr
+for the updates of the specific nodes.
 }
 
-\examples{
-# see
-help(utility)
-# for examples.
-}
 

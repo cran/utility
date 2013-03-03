@@ -11,7 +11,7 @@ Plot node definition.
 \usage{
 \method{plot}{utility.endnode.cond}(x, 
      par       = NA, 
-     col       = utility.calc.colors(utility.num.colors), 
+     col       = utility.calc.colors(), 
      gridlines = c(0.2, 0.4, 0.6, 0.8), 
      main      = "", 
      cex.main  = 1, 
@@ -63,7 +63,7 @@ are as far as possible the same so that all end nodes can be plotted with the sa
 \references{
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
-Constructing, evaluating and visualizing value and utility functions for decision support, submitted. \cr\cr
+Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software, in press. \cr\cr
 Textbooks on the use of utility and value functions in decision analysis: \cr\cr
 Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives. Cambridge University Press, 1993. First published in 1976. \cr\cr
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.
@@ -74,7 +74,8 @@ Peter Reichert <peter.reichert@eawag.ch>
 }
 
 \seealso{
-See \code{\link{utility.endnode.cond.create}} for how to construct such a node and \code{\link{evaluate.utility.endnode.cond}} for how to evaluate the node.
+See \code{\link{utility.endnode.cond.create}} for how to construct such a node and \code{\link{evaluate.utility.endnode.cond}} for how to evaluate the node. \cr\cr
+See \code{\link{utility.calc.colors}} for an example of how to construct color schemes and \code{\link{utility.get.colors}} for how to get colors for specifed value levels.
 }
 
 \examples{

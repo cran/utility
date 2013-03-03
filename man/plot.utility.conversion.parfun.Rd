@@ -15,7 +15,7 @@ Plot node definition or underlying objectives hierarchy.
      par         = NA, 
      type        = c("hierarchy", "table", "node", "nodes"), 
      nodes       = NA, 
-     col         = utility.calc.colors(utility.num.colors), 
+     col         = utility.calc.colors(), 
      gridlines   = c(0.2, 0.4, 0.6, 0.8), 
      main        = "", 
      cex.main    = 1, 
@@ -38,12 +38,12 @@ Typically, this will be the complete output or an output row of
 the function \cr \code{\link{evaluate.utility.aggregation}}. \cr
 This input is only considered if the argument \code{type} is specified
 to be either \code{"hierarchy"} or \code{"table"}.
-It is then used to color-code the boxes of the hierarchy or the table.
+It is then used to color-code the boxes of the hierarchy representing value nodes or the table.
 If \code{u} is a data frame with more than one row and the argument \code{type} 
 is equal to \code{"hierarchy"}, then
-the median and quantile boxes are plotted unless the argument \code{main}
+the median and quantile boxes are plotted for value nodes or the expected utility for utility nodes unless the argument \code{main}
 contains as many elements as the number of rows of \code{u}.
-In the latter case, hierarchies with color-coded boxes are produced for all rows of \code{u}.
+In the latter case, separate hierarchies with color-coded boxes for value nodes are produced for all rows of \code{u}.
 }
   \item{uref}{
 (optional) vector or data frame with elements or columns labelled
@@ -132,7 +132,7 @@ the same commands irrespective of the type of the top-level node.
 \references{
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
-Constructing, evaluating and visualizing value and utility functions for decision support, submitted. \cr\cr
+Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software, in press. \cr\cr
 Textbooks on the use of utility and value functions in decision analysis: \cr\cr
 Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives. Cambridge University Press, 1993. First published in 1976. \cr\cr
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.
@@ -143,7 +143,8 @@ Peter Reichert <peter.reichert@eawag.ch>
 }
 
 \seealso{
-See \code{\link{utility.conversion.parfun.create}} for how to construct such a node and \code{\link{evaluate.utility.conversion.parfun}} for how to evaluate the node.
+See \code{\link{utility.conversion.parfun.create}} for how to construct such a node and \code{\link{evaluate.utility.conversion.parfun}} for how to evaluate the node. \cr\cr
+See \code{\link{utility.calc.colors}} for an example of how to construct color schemes and \code{\link{utility.get.colors}} for how to get colors for specifed value levels.
 }
 
 \examples{

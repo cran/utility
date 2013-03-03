@@ -17,6 +17,7 @@ export("utility.aggregate.mult")
 export("utility.fun.exp")
 
 export("utility.calc.colors")
+export("utility.get.colors")
 
 S3method("print","utility.endnode.discrete")
 S3method("print","utility.endnode.intpol1d")
@@ -55,6 +56,15 @@ S3method("plot","utility.aggregation")
 S3method("plot","utility.conversion.intpol")
 S3method("plot","utility.conversion.parfun")
 
+export("updatepar")
+S3method("updatepar","utility.endnode.discrete")
+S3method("updatepar","utility.endnode.intpol1d")
+S3method("updatepar","utility.endnode.parfun1d")
+S3method("updatepar","utility.endnode.intpol2d")
+S3method("updatepar","utility.endnode.cond")
+S3method("updatepar","utility.aggregation")
+S3method("updatepar","utility.conversion.intpol")
+S3method("updatepar","utility.conversion.parfun")
 
 
 

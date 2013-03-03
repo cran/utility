@@ -1,29 +1,26 @@
-\name{print.utility.endnode.cond}
+\name{utility.get.colors}
 
-\alias{print.utility.endnode.cond}
+\alias{utility.get.colors}
 
-\title{Print Node Definition}
+\title{Get Color Corresponding to Specified Value Levels}
 
-\description{
-Print node defintion.
-}
+\description{Function to get the colors from a given color scheme at specific value levels.}
 
 \usage{
-\method{print}{utility.endnode.cond}(x, ...)
+utility.get.colors(u,col=utility.calc.colors())
 }
 
 \arguments{
-  \item{x}{
-node to be printed.
+  \item{u}{
+value level representing the evaluation ot a value function (this value level has to be between zero and unity).
 }
-  \item{...}{
-currently no other arguments are implemented or passed further.
+  \item{col}{
+color scheme (vector of colors to be used for a division of the interval between zero and unity into equal intervals)).
 }
 }
 
-\note{
-In the current version of the package, the methods \code{print} and \code{summary}
-provide the same output.
+\value{
+Character vector of colors.
 }
 
 \references{
@@ -40,11 +37,11 @@ Peter Reichert <peter.reichert@eawag.ch>
 }
 
 \seealso{
-See \code{\link{utility.endnode.cond.create}} for how to construct such a node.
+See \cr
+\code{\link{utility.calc.colors}}
 }
 
 \examples{
-# see
-help(utility)
-# for examples.
+utility.get.colors(c(0,0.5,1))
 }
+

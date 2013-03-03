@@ -8,14 +8,14 @@
 
 \title{Construct, Evaluate and Plot Value and Utility Functions}
 
-\description{Construct and plot objective hierarchies and associated value and utility functions. Evaluate the values and utilities and visualize the results as colored objective hierarchies or tables. Visualize uncertainty by plotting median and quantile intervals within the nodes of the objective hierarchy. Get numerical results of the evaluations in standard \R data tyes for further processing.}
+\description{Construct and plot objective hierarchies and associated value and utility functions. Evaluate the values and utilities and visualize the results as colored objective hierarchies or tables. Visualize uncertainty by plotting median and quantile intervals within the nodes of the objective hierarchy. Get numerical results of the evaluations in standard \R data types for further processing.}
 
 \details{
 \tabular{ll}{
 Package: \tab utility\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2012-09-22\cr
+Version: \tab 1.1\cr
+Date: \tab 2013-03-03\cr
 License: \tab GPL (>= 2)\cr
 }
 An objective hierarchy and an associated value or utility function 
@@ -134,7 +134,7 @@ Maintainer: Peter Reichert <peter.reichert@eawag.ch>
 \references{
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
-Constructing, evaluating and visualizing value and utility functions for decision support, submitted. \cr\cr
+Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software, in press. \cr\cr
 Textbooks on the use of utility and value functions in decision analysis: \cr\cr
 Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives. Cambridge University Press, 1993. First published in 1976. \cr\cr
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.

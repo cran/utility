@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.0                                        Peter Reichert 22.09.2012 #
+# version 1.01                                       Peter Reichert 18.10.2012 #
 #                                                                              #
 ################################################################################
 
@@ -18,14 +18,6 @@ evaluate      <- function(x, ...) UseMethod("evaluate")
 evaluate.cond <- function(x, ...) UseMethod("evaluate.cond")
 
 # in addition, we support the functions plot, print and summary
-
-
-# ==============================================================================
-# global parameters
-# ==============================================================================
-
-
-utility.num.colors <- 5
 
 
 # ==============================================================================
@@ -350,7 +342,7 @@ utility.calc.colors <- function(n=5)
 }
 
 
-utility.get.colors <- function(u,col=utility.calc.colors(utility.num.colors))
+utility.get.colors <- function(u,col=utility.calc.colors())
 {
    col.ind <- 1 + floor(u*length(col)*0.99999)
    cols <- col[col.ind]
@@ -813,7 +805,7 @@ utility.structure <- function(node)
 
 utility.endnode.plot1d <- 
                    function(node,
-                            col       = utility.calc.colors(utility.num.colors),
+                            col       = utility.calc.colors(),
                             gridlines = c(0.2,0.4,0.6,0.8),
                             main      = "",
                             cex.main  = 1,
@@ -880,7 +872,7 @@ utility.endnode.plot1d <-
 
 
 utility.endnode.plot2d <- function(node,
-                                   col       = utility.calc.colors(utility.num.colors),
+                                   col       = utility.calc.colors(),
                                    gridlines = c(0.2,0.4,0.6,0.8),
                                    main      = "",
                                    cex.main  = 1,
@@ -1033,7 +1025,7 @@ utility.plothierarchy <-
    function(node,
             u           = NA,
             uref        = NA,
-            col         = utility.calc.colors(utility.num.colors),
+            col         = utility.calc.colors(),
             main        = main,
             cex.main    = 1,
             cex.nodes   = 1,
@@ -1398,7 +1390,7 @@ utility.plothierarchy <-
 utility.plottable <- 
    function(u          = NA,
             nodes      = NA,
-            col        = utility.calc.colors(utility.num.colors),
+            col        = utility.calc.colors(),
             main       = "",
             labels     = NA,
             cex.main   = 1,
@@ -1511,7 +1503,7 @@ utility.plot <- function(node,
                          uref        = NA,
                          type        = c("hierarchy","table","node","nodes"),
                          nodes       = NA,
-                         col         = utility.calc.colors(utility.num.colors),
+                         col         = utility.calc.colors(),
                          gridlines   = c(0.2,0.4,0.6,0.8),
                          main        = "",
                          labels      = NA,
@@ -1952,7 +1944,7 @@ summary.utility.endnode.intpol1d <- function(object,...)
 plot.utility.endnode.intpol1d <- 
                    function(x,
                             par       = NA,
-                            col       = utility.calc.colors(utility.num.colors),
+                            col       = utility.calc.colors(),
                             gridlines = c(0.2,0.4,0.6,0.8),
                             main      = "",
                             cex.main  = 1,
@@ -2328,7 +2320,7 @@ summary.utility.endnode.intpol2d <- function(object,...)
 plot.utility.endnode.intpol2d <- 
                    function(x,
                             par       = NA,
-                            col       = utility.calc.colors(utility.num.colors),
+                            col       = utility.calc.colors(),
                             gridlines = c(0.2,0.4,0.6,0.8),
                             main      = "",
                             cex.main  = 1,
@@ -2579,7 +2571,7 @@ summary.utility.endnode.parfun1d <- function(object,...)
 plot.utility.endnode.parfun1d <- 
                    function(x,
                             par       = NA,
-                            col       = utility.calc.colors(utility.num.colors),
+                            col       = utility.calc.colors(),
                             gridlines = c(0.2,0.4,0.6,0.8),
                             main      = "",
                             cex.main  = 1,
@@ -2865,7 +2857,7 @@ summary.utility.endnode.discrete <- function(object,...)
 plot.utility.endnode.discrete <- 
                          function(x,
                                   par       = NA,
-                                  col       = utility.calc.colors(utility.num.colors),
+                                  col       = utility.calc.colors(),
                                   gridlines = c(0.2,0.4,0.6,0.8),
                                   main      = "",
                                   cex.main  = 1,
@@ -3168,7 +3160,7 @@ summary.utility.endnode.cond <- function(object,...)
 plot.utility.endnode.cond <-
                          function(x,
                                   par       = NA,
-                                  col       = utility.calc.colors(utility.num.colors),
+                                  col       = utility.calc.colors(),
                                   gridlines = c(0.2,0.4,0.6,0.8),
                                   main      = "",
                                   cex.main  = 1,
@@ -3485,7 +3477,7 @@ plot.utility.aggregation <-
                             par         = NA,
                             type        = c("hierarchy","table","node","nodes"),
                             nodes       = NA,
-                            col         = utility.calc.colors(utility.num.colors),
+                            col         = utility.calc.colors(),
                             gridlines   = c(0.2,0.4,0.6,0.8),
                             main        = "",
                             cex.main    = 1,
@@ -3739,7 +3731,7 @@ plot.utility.conversion.intpol <-
                             par         = NA,
                             type        = c("hierarchy","table","node","nodes"),
                             nodes       = NA,
-                            col         = utility.calc.colors(utility.num.colors),
+                            col         = utility.calc.colors(),
                             gridlines   = c(0.2,0.4,0.6,0.8),
                             main        = "",
                             cex.main    = 1,
@@ -3967,7 +3959,7 @@ plot.utility.conversion.parfun <-
                             par         = NA,
                             type        = c("hierarchy","table","node","nodes"),
                             nodes       = NA,
-                            col         = utility.calc.colors(utility.num.colors),
+                            col         = utility.calc.colors(),
                             gridlines   = c(0.2,0.4,0.6,0.8),
                             main        = "",
                             cex.main    = 1,
