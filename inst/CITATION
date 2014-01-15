@@ -1,0 +1,17 @@
+citHeader("To cite package 'utility' in publications use:")
+
+citEntry(entry="Article",
+  title = "Constructing, Evaluating and Visualizing Value and Utility Functions for Decision Support",
+  author = personList(as.person("Peter Reichert"), 
+                      as.person("Nele Schuwirth"), 
+                      as.person("Simone Langhans")),
+  journal =	"Environmental Modelling and Software",
+  volume = "46",
+  pages = "283--291",
+  year = "2013",
+  doi = "10.1016/j.envsoft.2013.01.017",
+  keywords = "Decision support, Multi-criteria decision analysis, Value functions, Utility functions, Uncertainty, Environmental management, Ecological river assessment, River management",
+  textVersion = paste("Peter Reichert, Nele Schuwirth and Simone Langhans (2013),
+    Constructing, evaluating and visualizing value and utility functions for decision support.  Environmental Modelling and Software 46,
+    283-291.  DOI 10.1016/j.envsoft.2013.01.017")
+)

@@ -24,6 +24,8 @@ Plot node definition or underlying objectives hierarchy.
      f.reaches   = 0.2,
      f.nodes     = 0.2,
      with.attrib = TRUE,
+     levels      = NA,
+     plot.val    = TRUE,
      ...)
 }
 
@@ -44,6 +46,9 @@ is equal to \code{"hierarchy"}, then
 the median and quantile boxes are plotted for value nodes or the expected utility for utility nodes unless the argument \code{main}
 contains as many elements as the number of rows of \code{u}.
 In the latter case, separate hierarchies with color-coded boxes for value nodes are produced for all rows of \code{u}.
+For \code{type} equals \code{"table"}, this argument can be a list of data frames
+to make it possible to plot uncertainty ranges from the samples provided
+in the list.
 }
   \item{uref}{
 (optional) vector or data frame with elements or columns labelled
@@ -116,7 +121,13 @@ Otherwise, the medians and colored boxes indicating 90\% credibility or occurren
   \item{with.attrib}{
 (optional) indicates if attributes should be listed if the argument \code{type} is equal to \code{"hierarchy"}.
 }
-\item{\dots}{
+  \item{levels}{
+(optional) how many levels of the hierarchy should be plotted (NA means to plot all levels).
+}
+  \item{plot.val}{
+(optional) plot value as a vertical line within the box.
+}
+  \item{\dots}{
 additional arguments passed to the R plotting routine.
 }
 }
@@ -132,9 +143,9 @@ the same commands irrespective of the type of the top-level node.
 \references{
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
-Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software, in press. \cr\cr
+Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software 46, 283-291, 2013. \cr\cr
 Textbooks on the use of utility and value functions in decision analysis: \cr\cr
-Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives. Cambridge University Press, 1993. First published in 1976. \cr\cr
+Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives - Preferences and Value Tradeoffs. John Wiley & Sons, 1976. \cr\cr
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.
 }
 

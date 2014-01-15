@@ -1,13 +1,18 @@
-\name{utility.aggregate.min}
+\name{utility.aggregate.harmooff}
 
-\alias{utility.aggregate.min}
+\alias{utility.aggregate.harmooff}
 
-\title{Minimum aggregation of values or utilities}
+\title{Harmonic aggregation of values or utilities with offset}
 
-\description{Function to perform a minimum aggregation of values or utilities.}
+\description{
+Function to perform a harmonic aggregation 
+(weighted harmonic mean) of values or utilities
+with offset.
+The offset is added to the arguments and subtracted from the result.
+}
 
 \usage{
-utility.aggregate.min(u, par = NA)
+utility.aggregate.harmooff(u, par)
 }
 
 \arguments{
@@ -15,13 +20,17 @@ utility.aggregate.min(u, par = NA)
 numeric vector of values or utilities to be aggregated.
 }
   \item{par}{
-unused argument used for compatibility with other aggregation techniques
-that require parameters.
+numeric vector of weights appended by an offset for calculating the 
+weighted harmonic mean minus an offset of the values provided in the 
+argument \code{u} plus the offset.
+The weights need not be normalized, they will be normalized before use.
+In case of missing values in the vector \code{u}, the weights of the
+non-missing components will be rescaled to sum to unity.
 }
 }
 
 \value{
-minimum of the components of \code{u}.
+The function returns the aggregated value or utility.
 }
 
 \references{
@@ -42,6 +51,7 @@ Constructor of aggregation node: \cr\cr
 \code{\link{utility.aggregation.create}} \cr\cr
 Alternative aggregation techniques: \cr\cr
 \code{\link{utility.aggregate.add}}, \cr
+\code{\link{utility.aggregate.min}}, \cr
 \code{\link{utility.aggregate.max}}, \cr
 \code{\link{utility.aggregate.cobbdouglas}}, \cr
 \code{\link{utility.aggregate.geo}}, \cr
@@ -49,7 +59,6 @@ Alternative aggregation techniques: \cr\cr
 \code{\link{utility.aggregate.revgeo}}, \cr
 \code{\link{utility.aggregate.revgeooff}}, \cr
 \code{\link{utility.aggregate.harmo}}, \cr
-\code{\link{utility.aggregate.harmooff}}, \cr
 \code{\link{utility.aggregate.revharmo}}, \cr
 \code{\link{utility.aggregate.revharmooff}}, \cr
 \code{\link{utility.aggregate.mult}}, \cr
@@ -57,6 +66,6 @@ Alternative aggregation techniques: \cr\cr
 }
 
 \examples{
-utility.aggregate.min(c(0.2,0.8))
+utility.aggregate.harmooff(c(0.2,0.8), par=c(1,1))
 }
 

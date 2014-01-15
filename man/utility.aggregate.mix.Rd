@@ -7,7 +7,7 @@
 \description{
 Function to perform a mixed aggregation of values and utilities.
 The mixture consists of a weighted mean of the additive, minimum
-and Cobb-Douglas aggregation techniques.
+and geometric aggregation techniques.
 }
 
 \usage{
@@ -21,7 +21,7 @@ numeric vector of values or utilities to be aggregated.
   \item{par}{
 numeric vector of weights for calculating the weighted mean of the
 values provided in the argument \code{u} followed by the three 
-weights of the additive, minimum and Cobb-Douglas aggregation 
+weights of the additive, minimum and geometric aggregation 
 techniques.
 The weights need not be normalized, they will be normalized before use.
 In case of missing values in the vector \code{u}, the weights of the
@@ -36,9 +36,9 @@ The function returns the aggregated value or utility.
 \references{
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
-Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software, in press. \cr\cr
+Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software 46, 283-291, 2013. \cr\cr
 Textbooks on the use of utility and value functions in decision analysis: \cr\cr
-Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives. Cambridge University Press, 1993. First published in 1976. \cr\cr
+Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives - Preferences and Value Tradeoffs. John Wiley & Sons, 1976. \cr\cr
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.
 }
 
@@ -52,8 +52,16 @@ Constructor of aggregation node: \cr\cr
 Alternative aggregation techniques: \cr\cr
 \code{\link{utility.aggregate.add}}, \cr
 \code{\link{utility.aggregate.min}}, \cr
-\code{\link{utility.aggregate.cobbdouglas}}, \cr
 \code{\link{utility.aggregate.max}}, \cr
+\code{\link{utility.aggregate.cobbdouglas}}, \cr
+\code{\link{utility.aggregate.geo}}, \cr
+\code{\link{utility.aggregate.geooff}}, \cr
+\code{\link{utility.aggregate.revgeo}}, \cr
+\code{\link{utility.aggregate.revgeooff}}, \cr
+\code{\link{utility.aggregate.harmo}}, \cr
+\code{\link{utility.aggregate.harmooff}}, \cr
+\code{\link{utility.aggregate.revharmo}}, \cr
+\code{\link{utility.aggregate.revharmooff}}, \cr
 \code{\link{utility.aggregate.mult}}.
 }
 

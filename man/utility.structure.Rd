@@ -1,29 +1,23 @@
-\name{print.utility.conversion.intpol}
+\name{utility.structure}
 
-\alias{print.utility.conversion.intpol}
+\alias{utility.structure}
 
-\title{Print Definitions of Node and Associated Hierarchy}
+\title{Extract Structure of Objectives Hierarchy}
 
-\description{
-Print definition of node and associated hierarchy.
-}
+\description{Function to extract the structure of an objectives hierarchy.}
 
 \usage{
-\method{print}{utility.conversion.intpol}(x, ...)
+utility.structure(node)
 }
 
 \arguments{
-  \item{x}{
-node to be printed.
-}
-  \item{...}{
-currently no other arguments are implemented or passed further.
+  \item{node}{
+object containing the utility or value function.
 }
 }
 
-\note{
-In the current version of the package, the methods \code{print} and \code{summary}
-provide the same output.
+\value{
+Data frame containing structural information of the objectives hierarchy.
 }
 
 \references{
@@ -37,16 +31,6 @@ Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Be
 
 \author{
 Peter Reichert <peter.reichert@eawag.ch>
-}
-
-\seealso{
-See \code{\link{utility.conversion.intpol.create}} for how to construct such a node.
-}
-
-\examples{
-# see
-help(utility)
-# for examples.
 }
 
 

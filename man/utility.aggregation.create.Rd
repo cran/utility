@@ -34,10 +34,18 @@ The function must then return the corresponding aggregated value or utility.
 Examples of functions provided by the package are \cr\cr
 \code{\link{utility.aggregate.add}} for additive aggregation \cr\cr
 \code{\link{utility.aggregate.min}} for minimum aggregation \cr\cr
-\code{\link{utility.aggregate.cobbdouglas}} for Cobb-Douglas aggregation \cr\cr
 \code{\link{utility.aggregate.max}} for maximum aggregation \cr\cr
+\code{\link{utility.aggregate.geo}} or \cr
+\code{\link{utility.aggregate.cobbdouglas}} for geometric or Cobb-Douglas aggregation \cr\cr
+\code{\link{utility.aggregate.geooff}} for geometric aggregation with offset \cr\cr
+\code{\link{utility.aggregate.revgeo}} for reverse geometric aggregation, \cr\cr
+\code{\link{utility.aggregate.revgeooff}} for reverse geometric aggregation with offset, \cr\cr
+\code{\link{utility.aggregate.harmo}} for harmonic aggregation, \cr\cr
+\code{\link{utility.aggregate.harmooff}} for harmonic aggregation with offset, \cr\cr
+\code{\link{utility.aggregate.revharmo}} for reverse harmonic aggregation, \cr\cr
+\code{\link{utility.aggregate.revharmooff}} for reverse harmonic aggregation with offset, \cr\cr
 \code{\link{utility.aggregate.mult}} for multiplicative aggregation \cr\cr
-\code{\link{utility.aggregate.mix}} for mixed aggregation of additive, minimum, and Cobb-Douglas aggregation.
+\code{\link{utility.aggregate.mix}} for a mixture of additive, minimum, and geometric aggregation.
 }                                                          
   \item{par}{
 numeric vector of parameter values to be passed to the function specified unter \code{name.fun}.
@@ -71,9 +79,9 @@ The function returns the created object of type \code{utility.aggregation} with 
 \references{
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
-Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software, in press. \cr\cr
+Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software 46, 283-291, 2013. \cr\cr
 Textbooks on the use of utility and value functions in decision analysis: \cr\cr
-Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives. Cambridge University Press, 1993. First published in 1976. \cr\cr
+Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives - Preferences and Value Tradeoffs. John Wiley & Sons, 1976. \cr\cr
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.
 }
 

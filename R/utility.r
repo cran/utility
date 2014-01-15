@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.01                                       Peter Reichert 18.10.2012 #
+# version 1.2                                        Peter Reichert 15.01.2014 #
 #                                                                              #
 ################################################################################
 
@@ -46,8 +46,8 @@ utility.aggregate.add <- function(u,par)  # par[i]: weight of u[i]
    
    if ( length(u) != length(par) )
    {
-      warning("Length of utilities/values and weights not equal:",
-              length(u),length(par))
+      warning("Length of utilities/values and weights not equal: ",
+              length(u)," ",length(par))
       return(NA)
    }
    ind <- which(!is.na(u))
@@ -104,8 +104,8 @@ utility.aggregate.mult <- function(u,par)
    
    if ( length(u) != length(par) )
    {
-      warning("Length of utilities/values and weights not equal:",
-              length(u),length(par))
+      warning("Length of utilities/values and weights not equal: ",
+              length(u)," ",length(par))
       return(NA)
    }
    ind <- which(!is.na(u))
@@ -119,6 +119,19 @@ utility.aggregate.mult <- function(u,par)
       warning("Parameter of multiplicative aggregation",
               "smaller than zero or larger than unity")
       return(NA)
+   }
+   
+   # function used in uniroot to determine the scaling constant k:
+
+   utility.aggregate.mult.root <- function(k,ki)
+   {
+     res <- 1
+     for ( i in 1:length(ki) )
+     {
+       res <- res * ( 1 + k * ki[i] )
+     }
+     res <- 1 + k - res
+     return(res)
    }
    
    # define numerical parameter:
@@ -148,7 +161,7 @@ utility.aggregate.mult <- function(u,par)
    {
       lower <- 1
       i <- 0
-      while ( utility.aggregate.mult.f.root(lower,ki) < 0 )
+      while ( utility.aggregate.mult.root(lower,ki) < 0 )
       {
          lower <- 0.1*lower
          i <- i+1
@@ -160,7 +173,7 @@ utility.aggregate.mult <- function(u,par)
       }
       upper <- 1
       i <- 0
-      while ( utility.aggregate.mult.f.root(upper,ki) > 0 )
+      while ( utility.aggregate.mult.root(upper,ki) > 0 )
       {
          upper <- 10*upper
          i <- i+1
@@ -170,14 +183,14 @@ utility.aggregate.mult <- function(u,par)
             return(NA)
          }
       }
-      k <- uniroot(utility.aggregate.mult.f.root,ki=ki,
+      k <- uniroot(utility.aggregate.mult.root,ki=ki,
                    lower=lower,upper=upper)$root
    }
    else  # s > 1
    {
       upper <- -0.1
       i <- 0
-      while ( utility.aggregate.mult.f.root(upper,ki) < 0 )
+      while ( utility.aggregate.mult.root(upper,ki) < 0 )
       {
          upper <- 0.1*upper
          i <- i+1
@@ -187,7 +200,7 @@ utility.aggregate.mult <- function(u,par)
             return(NA)
          }
       }
-      k <- uniroot(utility.aggregate.mult.f.root,ki=ki,
+      k <- uniroot(utility.aggregate.mult.root,ki=ki,
                    lower=-1,upper=upper)$root 
    }
 
@@ -199,58 +212,147 @@ utility.aggregate.mult <- function(u,par)
       if ( !is.na(u[ind][i]) ) u.agg <- u.agg * (k*ki[i]*u[ind][i]+1) 
    }
    u.agg <- (u.agg - 1)/k
-      
+   
+   # eliminate values out of range due to numerical inaccuracies:
+   
+   u.agg <- ifelse(u.agg < 0, 0, u.agg)
+   u.agg <- ifelse(u.agg > 1, 1, u.agg)
+   
    return(as.numeric(u.agg))
 }
 
 
-utility.aggregate.mult.f.root <- function(k,ki)
+utility.aggregate.geo <- function(u,par) 
 {
-   res <- 1
-   for ( i in 1:length(ki) )
-   {
-      res <- res * ( 1 + k * ki[i] )
-   }
-   res <- 1 + k - res
-   return(res)
+  # check input:
+  
+  if ( length(u) != length(par) )
+  {
+    warning("Length of utilities/values and weights not equal: ",
+            length(u)," ",length(par))
+    return(NA)
+  }
+  ind <- which(!is.na(u))
+  if ( length(ind) == 0 ) return(NA)
+  if ( sum( par < 0 ) > 0 )
+  {
+    warning("Parameter of geometric aggregation smaller than zero")
+    return(NA)
+  }
+  
+  # calculate aggregated value
+  
+  s <- sum(par[ind])
+  if ( s <= 0 ) return(NA)
+  u.agg <- 1
+  for ( i in 1:length(ind) )
+  {
+    if ( par[ind][i]>0 ) u.agg <- u.agg*u[ind][i]^(par[ind][i]/s)
+  }
+  
+  return(as.numeric(u.agg))
+}
+
+
+utility.aggregate.revgeo <- function(u,par) 
+{
+  return(1-utility.aggregate.geo(1-u,par))
+}
+
+
+utility.aggregate.geooff <- function(u,par)
+{
+  n <- length(u)
+  
+  # check input:
+  
+  if ( length(par) != n + 1)
+  {
+    warning("Length of parameter vector should be length of utilities/values (for weights) plus one (for offset): ",
+            length(par)," ",n)
+    return(NA)
+  }
+  u <- utility.aggregate.geo(u+par[n+1],par[1:n])-par[n+1]
+  # correct for numerical errors due to differences of "large" numbers
+  u <- ifelse(u>0,u,0)
+  u <- ifelse(u<1,u,1)
+  return(u) 
+}
+
+
+utility.aggregate.revgeooff <- function(u,par) 
+{
+  return(1-utility.aggregate.geooff(1-u,par))
 }
 
 
 utility.aggregate.cobbdouglas <- function(u,par) 
 {
-   # check input:
-   
-   if ( length(u) != length(par) )
-   {
-      warning("Length of utilities/values and weights not equal:",
-              length(u),length(par))
-      return(NA)
-   }
-   ind <- which(!is.na(u))
-   if ( length(ind) == 0 ) return(NA)
-   if ( sum( par < 0 ) > 0 )
-   {
-      warning("Parameter of Cobb-Douglas aggregation smaller than zero")
-      return(NA)
-   }
-   
-   # calculate aggregated value
+  return(utility.aggregate.geo(u,par))
+}
 
-   s <- sum(par[ind])
-   if ( s <= 0 ) return(NA)
-   u.agg <- 1
-   for ( i in 1:length(ind) )
-   {
-      if ( par[ind][i]>0 ) u.agg <- u.agg*u[ind][i]^(par[ind][i]/s)
-   }
-   
-   return(as.numeric(u.agg))
+
+utility.aggregate.harmo <- function(u,par) 
+{
+  # check input:
+  
+  if ( length(u) != length(par) )
+  {
+    warning("Length of utilities/values and weights not equal: ",
+            length(u)," ",length(par))
+    return(NA)
+  }
+  ind <- which(!is.na(u))
+  if ( length(ind) == 0 ) return(NA)
+  if ( sum( par < 0 ) > 0 )
+  {
+    warning("Parameter of harmonic aggregation smaller than zero")
+    return(NA)
+  }
+  
+  # calculate aggregated value
+  
+  s <- sum(par[ind])
+  if ( s <= 0 ) return(NA)
+  if ( sum(u==0) > 0 ) return(0)
+  
+  u.agg <- s / sum(par[ind]/u[ind])
+  
+  return(as.numeric(u.agg))
+}
+
+
+utility.aggregate.revharmo <- function(u,par) 
+{
+  return(1-utility.aggregate.harmo(1-u,par))
+}
+
+
+utility.aggregate.harmooff <- function(u,par)
+{
+  n <- length(u)
+  
+  # check input:
+  
+  if ( length(par) != n + 1)
+  {
+    warning("Length of parameter vector should be length of utilities/values (for weights) plus one (for offset): ",
+            length(par)," ",n)
+    return(NA)
+  }
+  return(utility.aggregate.harmo(u+par[n+1],par[1:n])-par[n+1])
+}
+
+
+utility.aggregate.revharmooff <- function(u,par) 
+{
+  return(1-utility.aggregate.harmooff(1-u,par))
 }
 
 
 utility.aggregate.mix <- function(u,par)  # par[i]: weight of u[i]
 {                                         # par[n+j]: weight of technique j
-   # check input:                         # (j = add, min, cobbdouglas)
+   # check input:                         # (j = add, min, geo)
    
    n <- length(u)
    if ( n+3 != length(par) )
@@ -268,12 +370,12 @@ utility.aggregate.mix <- function(u,par)  # par[i]: weight of u[i]
       return(NA)
    }
    
-   u.add         <- utility.aggregate.add(u,par[1:n])
-   u.min         <- utility.aggregate.min(u)
-   u.cobbdouglas <- utility.aggregate.cobbdouglas(u,par[1:n])
+   u.add <- 0; if ( par[n+1] != 0 ) u.add <- utility.aggregate.add(u,par[1:n])
+   u.min <- 0; if ( par[n+2] != 0 ) u.min <- utility.aggregate.min(u)
+   u.geo <- 0; if ( par[n+3] != 0 ) u.geo <- utility.aggregate.geo(u,par[1:n])
    
-   if ( is.na(u.add) | is.na(u.min) | is.na(u.cobbdouglas) ) return(NA)
-   u.agg <- (par[n+1]*u.add + par[n+2]*u.min + par[n+3]*u.cobbdouglas)/s
+   if ( is.na(u.add) | is.na(u.min) | is.na(u.geo) ) return(NA)
+   u.agg <- (par[n+1]*u.add + par[n+2]*u.min + par[n+3]*u.geo)/s
 
    return(u.agg)
 }
@@ -743,63 +845,84 @@ utility.check.name <- function(name,nodes)
 
 utility.structure <- function(node)
 {
-   if ( substring(class(node),1,7) != "utility" )
-   {
-      warning("Node \"",node$name,"\": argument must be a subclass of utility")
-      return(NA)
-   }
-   str <- data.frame(upper        = NA,
-                     utility      = node$utility,
-                     required     = node$required,
-                     num.required = node$num.required,
-                     color        = node$col,
-                     endnode      = FALSE,
-                     attributes   = NA,
-                     level        = 1 + node$shift.levels,
-                     endnodes     = 0,
-                     offset       = 0)
-   rownames(str) <- node$name
-   offset <- 0
-   for ( i in 1:length(node$nodes) )
-   {
-      if ( node$nodes[[i]]$type == "endnode" )
-      {
-         str.new <- data.frame(upper        = node$name,
-                               utility      = node$nodes[[i]]$utility,
-                               required     = node$nodes[[i]]$required,
-                               num.required = NA,
-                               color        = node$nodes[[i]]$col,
-                               endnode      = TRUE,
-                               attributes   = paste(node$nodes[[i]]$attrib,
-                                                    collapse=";"),
-                               level        = 2 + node$shift.levels,
-                               endnodes     = 1,
-                               offset       = offset)
-         rownames(str.new) <- node$nodes[[i]]$name
-         str[1,"endnodes"] <- str[1,"endnodes"] + 1
-         offset <- offset + 1
-      }
-      else
-      {
-         str.new <- utility.structure(node$nodes[[i]])
-         if ( ! is.data.frame(str.new) ) return(NA)
-         str.new[1,"upper"] <- node$name
-         str.new$level <- str.new$level + 1 + node$shift.levels
-         str.new$offset <- str.new$offset + offset
-         str[1,"endnodes"] <- str[1,"endnodes"] + str.new[1,"endnodes"]
-         offset <- offset + sum(ifelse(str.new$endnode,1,0))
-      }
+  if ( substring(class(node),1,7) != "utility" )
+  {
+    warning("Node \"",node$name,"\": argument must be a subclass of utility")
+    return(NA)
+  }
+  str <- data.frame(upper        = NA,
+                    utility      = node$utility,
+                    required     = node$required,
+                    num.required = if ( length(node$num.required) > 0 ) node$num.required else NA,
+                    color        = node$col,
+                    endnode      = FALSE,
+                    attributes   = NA,
+                    level        = 1 + node$shift.levels,
+                    endnodes     = 0,
+                    offset       = 0)
+  rownames(str) <- node$name
+  if ( node$type == "endnode" )
+  {
+    str$endnode    <- TRUE
+    str$attributes <- paste(node$attrib,collapse=";")
+    str$endnodes   <- 1
+  }
+  else
+  {
+    offset <- 0
+    for ( i in 1:length(node$nodes) )
+    {
+      str.new <- utility.structure(node$nodes[[i]])
+      if ( ! is.data.frame(str.new) ) return(NA)
+      str.new[1,"upper"] <- node$name
+      str.new$level <- str.new$level + 1 + node$shift.levels
+      str.new$offset <- str.new$offset + offset
+      str[1,"endnodes"] <- str[1,"endnodes"] + str.new[1,"endnodes"]
+      offset <- offset + sum(ifelse(str.new$endnode,1,0))
       ind1 <- match(rownames(str.new),rownames(str))
       ind2 <- ind1[!is.na(ind1)]
       if ( length(ind2) > 0 )
       {
-         cat("*** Warning: node name(s) not unique:","\n",
-             paste(rownames(str)[ind2],"\n"))
-         return(NA)
+        cat("*** Warning: node name(s) not unique:","\n",
+            paste(rownames(str)[ind2],"\n"))  
+        return(NA)
       }
       str <- rbind(str,str.new)
-   }
-   return(str)
+    }
+  }
+  return(str)
+}
+
+
+utility.prune <- function(str,level=NA)
+{
+  if ( !is.data.frame(str) ) return(NA)
+  if ( is.na(level) ) level <- max(str$level)-1
+  while ( max(str$level) > max(1,level) )
+  {
+    lev <- max(str$level)
+    while ( !is.na(match(lev,str$level)) )
+    {
+      upper <- str$upper[match(lev,str$level)]
+      ind.upper <- match(upper,rownames(str))
+      str$num.required[ind.upper] <- NA
+      str$endnode[ind.upper]      <- TRUE
+      ind.lower <- which(str$level==lev & str$upper==upper)
+      str$attributes[ind.upper] <- paste(unique(unlist(strsplit(str$attributes[ind.lower],split=";"))),collapse=";")
+      red <- length(ind.lower) - 1
+      if ( red > 0 )
+      {
+        str$offset <- ifelse(str$offset>str$offset[ind.upper],str$offset-red,str$offset)
+        while( !is.na(upper) )
+        {
+          str[upper,"endnodes"] <- str[upper,"endnodes"] - red
+          upper <- str[upper,"upper"]
+        }
+      }
+      str <- str[-ind.lower,]
+    }        
+  }
+  return(str)
 }
 
 
@@ -819,29 +942,45 @@ utility.endnode.plot1d <-
    plot(numeric(0),numeric(0),type="l",
         xlim=node$range,ylim=c(0,1),
         xlab=node$attrib,ylab=funtype,main=title,
-        xaxs="i",yaxs="i",cex.main=cex.main,...)
-        
+        xaxs="i",yaxs="i",xaxt="n",yaxt="n",cex.main=cex.main,...)
+
+   # colored bar along y axis:
+   
    if ( length(col)>1 & !node$utility )
    {
-      # plot colored axes
-      
+      num.grid = 100
+     
+      # y-axix:
+      endpoints <- seq(0,1,length.out=num.grid+1)+1/(2*num.grid)
+      midpoints <- 0.5*(endpoints[-1]+endpoints[-length(endpoints)])
+      cols <- utility.get.colors(midpoints,col)
+      for ( i in 1:(num.grid-1) )
+      {
+         lines((node$range[1]-0.01*(node$range[2]-node$range[1]))*c(1,1),
+               endpoints[c(i,i+1)],
+               col=cols[i],lwd=3,lend=2,xpd=TRUE)
+      }
+     
+      # x-axis:
       midpoints <- 0.5*(u[-1]+u[-length(u)])
       cols <- utility.get.colors(u,col)
-      for ( i in 1:(length-1) )
+      for ( i in 1:length(midpoints) )
       {
-         lines(c(x[i],x[i+1]),c(0,0)+0.001,col=cols[i],lwd=3)
+         lines(c(x[i],x[i+1]),
+               -0.01*c(1,1),
+               col=cols[i],lwd=3,lend=2,xpd=TRUE)
       }
-      du <- 1/(length-1)
-      midpoints <- seq(du,1-du,length=length-1)
-      cols <- utility.get.colors(midpoints,col)
-      for ( i in 1:(length-1) )
-      {
-         lines(c(1,1)*(node$range[1]+0.001*(node$range[2]-node$range[1])),
-               c((i-1)*du,i*du),col=cols[i],lwd=3)
-      }
-      
-      # plot grid lines:
-      
+   }
+   
+   # axes (should overly colored bar):
+   
+   axis(side=1)
+   axis(side=2)
+   
+   # plot gridlines:
+   
+   if ( !node$utility )
+   {
       if ( ! is.na(gridlines[1]) )
       {
          for ( level in gridlines )
@@ -929,95 +1068,201 @@ utility.aggregation.plot <- function(node           = node,
                                      col            = col,
                                      gridlines      = gridlines,
                                      cex.main       = 1,
+                                     cex.attrib     = 1,
+                                     cex.nodes      = 1,
                                      ...)
 {
-   nodes.names <- rep(NA,length(node$nodes))
-   for ( i in 1:length(node$nodes) ) nodes.names[i] <- node$nodes[[i]]$name
-   if ( node$name.fun == "utility.aggregate.add" )
-   {
+  nodes.names <- rep(NA,length(node$nodes))
+  for ( i in 1:length(node$nodes) ) nodes.names[i] <- node$nodes[[i]]$name
+  if ( length(node$nodes) == 2 )
+  {
+    num.grid <- 100
+    x <- ((1:num.grid)-0.5)/num.grid
+    y <- ((1:num.grid)-0.5)/num.grid
+    
+    array.x <- sort(rep(x,num.grid))
+    array.y <- rep(y,num.grid)
+    array.xy <- cbind(array.x,array.y)
+    
+    v <- apply(array.xy,1,node$name.fun,node$par)
+    v <- t(matrix(v,ncol=num.grid,byrow=FALSE))
+    
+    if ( node$utility )
+    {
+      contour(x=x,y=y,z=v,levels=gridlines,xlim=c(0,1),ylim=c(0,1),zlim=c(0,1),
+              axes=FALSE,add=FALSE,lty="solid",lwd=2,
+              xlab=node$nodes[[1]]$name,ylab=node$nodes[[2]]$name,
+              main=node$name,...)
+    }
+    else
+    {
+      # area coloring:
+      
+      image(x=x,y=y,z=v,xlim=c(0,1),ylim=c(0,1),zlim=c(0,1),
+            col=col,xaxt="n",yaxt="n",
+            xlab=node$nodes[[1]]$name,ylab=node$nodes[[2]]$name,
+            main=node$name,...)
+
+      # colored bar along axes:
+      
+      endpoints <- seq(0,1,length.out=num.grid+1)+1/(2*num.grid)
+      midpoints <- 0.5*(endpoints[-1]+endpoints[-length(endpoints)])
+      cols <- utility.get.colors(midpoints,col)
+      for ( i in 1:(num.grid-1) )
+      {
+        lines(-0.01*c(1,1),endpoints[c(i,i+1)],col=cols[i],lwd=3,lend=2,xpd=TRUE)
+        lines(endpoints[c(i,i+1)],-0.01*c(1,1),col=cols[i],lwd=3,lend=2,xpd=TRUE)
+      }
+      
+      # axes (should overly colored bar):
+      
+      axis(1)
+      axis(2)
+      lines(c(1,1,0),c(0,1,1))
+      
+      # contour lines:
+      
+      contour(x=x,y=y,z=v,levels=gridlines,xlim=c(0,1),ylim=c(0,1),zlim=c(0,1),
+              axes=FALSE,add=TRUE,lty="solid",lwd=2,...)
+    }
+  }
+  else
+  {
+    if ( node$name.fun == "utility.aggregate.add" |
+         node$name.fun == "utility.aggregate.geo" |  
+         node$name.fun == "utility.aggregate.cobbdouglas" |  
+         node$name.fun == "utility.aggregate.harmo")
+    {
+      type <- "Additive"
+      if ( node$name.fun == "utility.aggregate.geo" |  
+             node$name.fun == "utility.aggregate.cobbdouglas" ) type = "Geometric"
+      if ( node$name.fun == "utility.aggregate.harmo" ) type = "Harmonic"  
       w <- node$par/sum(node$par)
       w.max <- max(w)
       if ( length(w) != length(nodes.names) )
       {
-         warning("Node \"",node$name,"\": ",
-                 "length of sub-nodes and weights not equal: ",
-                 length(nodes.names)," ",length(w),sep="")
+        warning("Node \"",node$name,"\": ",
+                "length of sub-nodes and weights not equal: ",
+                length(nodes.names)," ",length(w),sep="")
       }
       else
       {
-         barplot(w,names.arg=nodes.names,ylim=c(0,1.2*w.max),
-                 ylab="weight",main=node$name,cex.main=cex.main)
-         text(0.5*1.3*length(w),1.1*w.max,"additive aggregation with weights:")
+        barplot(w,names.arg=nodes.names,ylim=c(0,1.2*w.max),
+                ylab="weight",main=node$name,cex.main=cex.main,cex.names=cex.nodes)
+        text(0.5*1.3*length(w),1.1*w.max,paste(type,"aggregation with weights:"))
       }
-   }
-   else
-   {
-      if ( node$name.fun == "utility.aggregate.cobbdouglas" )
+    }
+    else
+    {
+      if ( node$name.fun == "utility.aggregate.mult" )
       {
-         w <- node$par/sum(node$par)
-         w.max <- max(w)
-         if ( length(w) != length(nodes.names) )
-         {
-            warning("Node \"",node$name,"\": ",
-                    "length of sub-nodes and weights not equal ",
-                    length(nodes.names)," ",length(w),sep="")
-         }
-         else
-         {
-            barplot(w,names.arg=nodes.names,ylim=c(0,1.2*w.max),
-                    ylab="weight",main=node$name,cex.main=cex.main)
-            text(0.5*1.3*length(w),1.1*w.max,
-                 "Cobb-Douglas aggregation with weights:")
-         }
+        w <- node$par
+        w.max <- max(w)
+        if ( length(w) != length(nodes.names) )
+        {
+          warning("Node \"",node$name,"\": ",
+                  "length of sub-nodes and weights not equal: ",
+                  length(nodes.names)," ",length(w),sep="")
+        }
+        else
+        {
+          barplot(w,names.arg=nodes.names,ylim=c(0,1.2*w.max),
+                  ylab="weight",main=node$name,cex.main=cex.main,cex.names=cex.nodes)
+          text(0.5*1.3*length(w),1.1*w.max,
+               "Multiplicative aggregation with weights:")
+        }
       }
       else
       {
-         if ( node$name.fun == "utility.aggregate.mult" )
-         {
-            w <- node$par
-            w.max <- max(w)
-            if ( length(w) != length(nodes.names) )
-            {
-               warning("Node \"",node$name,"\": ",
-                       "length of sub-nodes and weights not equal: ",
-                       length(nodes.names)," ",length(w),sep="")
-            }
-            else
-            {
-               barplot(w,names.arg=nodes.names,ylim=c(0,1.2*w.max),
-                       ylab="weight",main=node$name,cex.main=cex.main)
-               text(0.5*1.3*length(w),1.1*w.max,
-                    "multiplicative aggregation with weights:")
-            }
-         }
-         else
-         {
-            if ( node$name.fun == "utility.aggregate.min" )
-            {
-               plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),
-                    xaxt="n",yaxt="n",main=node$name,xlab="",ylab="",
-                    cex.main=cex.main)
-               text(0.5,0.9,"Minimum (worst-case) aggregation of nodes:")
-               for ( i in 1:length(nodes.names) )
-               {
-                  text(0.5,0.7*i/length(nodes.names),nodes.names[i])
-               }
-            }
-            else
-            {
-               plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),
-                    xaxt="n",yaxt="n",main=node$name,xlab="",ylab="",
-                    cex.main=cex.main)
-               text(0.5,0.9,paste("aggregation with function \"",
-                                  node$name.fun,"\" of nodes:",sep=""))
-               for ( i in 1:length(nodes.names) )
-               {
-                  text(0.5,0.7*i/length(nodes.names),nodes.names[i])
-               }
-            }
-         }
+        if ( node$name.fun == "utility.aggregate.min" |
+             node$name.fun == "utility.aggregate.max" )
+        {
+          type <- "Minimum (worst-case)"
+          if ( node$name.fun == "utility.aggregate.max" ) type <- "Maximum"
+          plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),
+               xaxt="n",yaxt="n",main=node$name,xlab="",ylab="",
+               cex.main=cex.main)
+          text(0.5,0.9,paste(type,"aggregation of nodes:"))
+          for ( i in 1:length(nodes.names) )
+          {
+            text(0.5,0.7*i/length(nodes.names),nodes.names[i])
+          }
+        }
+        else
+        {
+          plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),
+               xaxt="n",yaxt="n",main=node$name,xlab="",ylab="",
+               cex.main=cex.main)
+          text(0.5,0.9,paste("aggregation with function \"",
+                             node$name.fun,"\" of nodes:",sep=""))
+          for ( i in 1:length(nodes.names) )
+          {
+            text(0.5,0.7*i/length(nodes.names),nodes.names[i])
+          }
+        }
       }
-   }
+    }
+  }
+}
+
+
+utility.plotcolbox <- function(x,y,col,val=NA,plot.val=FALSE)
+{
+  # check for availability of data:
+  
+  if ( length(val) == 0 ) return()
+  if ( is.na(val[1]) & length(col)>1 ) return()
+  
+  # plot colored box (without border):
+  
+  color <- col
+  if ( length(col) > 1 ) color <- utility.get.colors(val[1],col)
+  polygon(x      = c(x[1],x[2],x[2],x[1],x[1]),
+          y      = c(y[1],y[1],y[2],y[2],y[1]),
+          col    = color,
+          border = NA)
+  
+  # optionally plot value line:
+  
+  if ( plot.val & !is.na(val[1]) )
+  {
+    lines((x[1]+val[1]*(x[2]-x[1]))*c(1,1),y,lwd=1.0)
+  }
+}
+
+
+utility.plotquantbox <- function(x,y,col,val,num.stripes=500)
+{
+  min.halfwidth <- 0.02
+  
+  # check for availability of data:
+  
+  if ( length(val) == 0 ) return()
+  if ( sum(is.na(val)) == length(val) ) return()
+  
+  # get quantiles:
+  
+  quant <- quantile(val[!is.na(val)],probs=c(0.05,0.5,0.95))
+  if ( quant[3]-quant[1] < 2*min.halfwidth )
+  {
+    quant[1] <- max(0,quant[1]-min.halfwidth)
+    quant[3] <- min(1,quant[3]+min.halfwidth)
+  }
+  
+  # plot colored quantile box:
+  for ( j in floor(num.stripes*quant[1]):ceiling(num.stripes*quant[3]) )
+  {
+    lines((x[1]+j/num.stripes*(x[2]-x[1]))*c(1,1),y,
+          col=utility.get.colors(j/num.stripes,col))
+  }
+  
+  # plot median line:
+  
+  lines((x[1]+quant[2]*(x[2]-x[1]))*c(1,1),y,lwd=1.5)
+  
+  # return:
+  
+  return()
 }
 
 
@@ -1026,26 +1271,77 @@ utility.plothierarchy <-
             u           = NA,
             uref        = NA,
             col         = utility.calc.colors(),
-            main        = main,
+            main        = "",
             cex.main    = 1,
             cex.nodes   = 1,
             cex.attrib  = 1,
             with.attrib = TRUE,
+            levels      = NA,
+            plot.val    = TRUE,
             ...)
 {
+   # call multiple times if u and possibly uref are lists:
+     
+   if ( is.list(u) & !is.data.frame(u) )
+   {
+      if ( is.list(uref) & !is.data.frame(uref) )
+      {
+         if ( length(u) == length(uref) )
+         {
+            for ( i in 1:length(u) )
+            {
+               utility.plothierarchy(node        = node,
+                                     u           = u[[i]],
+                                     uref        = uref[[i]],
+                                     col         = col,
+                                     main        = main,
+                                     cex.main    = cex.main,
+                                     cex.nodes   = cex.nodes,
+                                     cex.attrib  = cex.attrib,
+                                     with.attrib = with.attrib,
+                                     levels      = levels,
+                                     plot.val    = plot.val,
+                                     ...)
+            }
+         }
+         else
+         {
+            warning("if u and uref are lists, their lengths must be equal")
+         }
+      }
+      else
+      {
+        utility.plothierarchy(node        = node,
+                              u           = u[[i]],
+                              uref        = uref,
+                              col         = col,
+                              main        = main,
+                              cex.main    = cex.main,
+                              cex.nodes   = cex.nodes,
+                              cex.attrib  = cex.attrib,
+                              with.attrib = with.attrib,
+                              levels      = levels,
+                              plot.val    = plot.val,
+                              ...)
+      }
+      return()
+   }
+     
    # global parameters:
 
    delta.x        <- 0.1
    delta.y        <- 0.1
-   min.median.dev <- 0.03
-   num.stripes    <- 500
    dh.rel.utility <- 0.1
 
    # get hierarchy structure and define positions of boxes:
          
    str <- utility.structure(node)
-   if ( ! is.data.frame(str) ) return(NA)
-   str$level <- str$level-min(str$level)+1  # remove indent of top node
+   if ( ! is.data.frame(str) )
+   {
+      warning("unable to identify structure of objectives hierarchy")
+      return()
+   }
+   if ( !is.na(levels) ) str <- utility.prune(str,levels)
    w <- 1/max(str$level)
    if ( with.attrib ) w <- 1/(max(str$level)+1)
    h <- 1/str$endnodes[1]
@@ -1130,206 +1426,90 @@ utility.plothierarchy <-
          text(x.r,y,"1",pos=1,cex=cex.nodes)
       }
       
+      # loop over all boxes in the hierarchy:
+      
       for ( i in 1:nrow(str) )
       {
          # calculate box edge coordinates:
             
-         x.box.l <- str$x[i] - (0.5-delta.x)*w
-         x.box.r <- str$x[i] + (0.5-delta.x)*w
-         y.box.b <- str$y[i] - (0.5-delta.y)*h
-         y.box.t <- str$y[i] + (0.5-delta.y)*h
-
-         # plot background color:
+         x  <- str$x[i] + (0.5-delta.x)*w*c(-1,1)
+         y  <- str$y[i] + (0.5-delta.y)*h*c(-1,1)
+         y1 <- c(0.5*(y[1]+y[2]),y[2])   # upper part, uref
+         y2 <- c(y[1],0.5*(y[1]+y[2]))   # lower part, u
+         
+         # plot background color or quantile boxes:
             
          if ( !u.available ) # plot required/not required nodes in differnt grey
          {
             if ( str$required[i] ) color <- grey(0.7)
             else                   color <- grey(0.9)
-            polygon(x   = c(x.box.l,x.box.r,x.box.r,x.box.l,x.box.l),
-                    y   = c(y.box.b,y.box.b,y.box.t,y.box.t,y.box.b),
-                    col = color)
+            utility.plotcolbox(x,y,color)
          }
          else
          {
             if ( !quant.summary ) # plot hierarchy for each row of u
             {
-               if ( str$utility[i] )  # plot horizontal lines for utility node
+               # plot background color and vertical line:
+              
+               val <- u.local[k,rownames(str)[i]]
+               color <- col
+               if ( str$utility[i] ) color <- "white"
+               if ( !uref.available )
                {
-                  val <- u.local[k,rownames(str)[i]]
-                  if ( ! is.na(val) )
-                  {
-                    y.t <- y.box.t
-                    if ( uref.available ) y.t <- 0.5*(y.box.b+y.box.t)
-                    lines((x.box.l+val*(x.box.r-x.box.l)*c(1,1)),
-                           c(y.box.b,y.t),lwd=1.5)
-                  }
-                  if ( uref.available )
-                  {
-                     val <- uref.local[ind.uref.local[k],rownames(str)[i]]
-                     if ( ! is.na(val) )
-                     {
-                        y.b <- 0.5*(y.box.b+y.box.t)
-                        lines((x.box.l+val*(x.box.r-x.box.l)*c(1,1)),
-                               c(y.b,y.box.t),lwd=1.5)
-                     }
-                  }
+                 utility.plotcolbox(x,y,color,val,plot.val)
                }
-               else   # plot colored boxes for value nodes
+               else
                {
-                  color <- "white"
-                  val <- u.local[k,rownames(str)[i]]
-                  if ( ! is.na(val) )
-                  {
-                     color <- utility.get.colors(val,col)
-                  }
-                  y.t <- y.box.t
-                  if ( uref.available ) y.t <- 0.5*(y.box.b+y.box.t)
-                  polygon(x   = c(x.box.l,x.box.r,x.box.r,x.box.l,x.box.l),
-                          y   = c(y.box.b,y.box.b,y.t    ,y.t    ,y.box.b),
-                          col = color,border=NA)
-                  # plot black value line:
-                  lines((x.box.l+val*(x.box.r-x.box.l)*c(1,1)),
-                        c(y.box.b,y.t),lwd=1.5)
-                  if ( uref.available )
-                  {
-                     color <- "white"
-                     val <- uref.local[ind.uref.local[k],rownames(str)[i]]
-                     if ( ! is.na(val) )
-                     {
-                        color <- utility.get.colors(val,col)
-                     }
-                     y.b <- 0.5*(y.box.b+y.box.t)
-                     polygon(x   = c(x.box.l,x.box.r,x.box.r,x.box.l,x.box.l),
-                             y   = c(y.b    ,y.b    ,y.box.t,y.box.t,y.b),
-                             col = color,border=NA)
-                     # plot black value line:
-                     lines((x.box.l+val*(x.box.r-x.box.l)*c(1,1)),
-                           c(y.b,y.box.t),lwd=1.5)
-                  }
+                 valref <- uref.local[k,rownames(str)[i]]
+                 utility.plotcolbox(x,y1,color,valref,plot.val)
+                 utility.plotcolbox(x,y2,color,val,plot.val)                 
                }
             }
             else # plot quantile summary of v or expected u
             {
-               if ( str$utility[i] )  # plot vertical line for expected utility
+               if ( !str$utility[i] ) # plot quantile summary
+               {
+                  val <- u.local[,rownames(str)[i]]
+                  if ( !uref.available )
+                  {
+                    utility.plotquantbox(x,y,col,val)
+                  }
+                  else
+                  {
+                    valref <- uref.local[,rownames(str)[i]]
+                    utility.plotquantbox(x,y1,col,valref)
+                    utility.plotquantbox(x,y2,col,val)
+                  }                 
+               }
+               else   # plot expected utility
                {
                   u.exp <- NA
                   column <- match(rownames(str)[i],colnames(u.local))
                   if ( !is.na(column) )
                   {
-                     u.exp <- mean(u.local[,column],na.rm=TRUE)
+                    u.exp <- mean(u.local[,column],na.rm=TRUE)
                   }
-                  uref.exp <- NA
-                  if ( uref.available )
+                  if ( !uref.available )
                   {
-                     column <- match(rownames(str)[i],colnames(uref.local))
-                     if ( !is.na(column) )
-                     {
-                        uref.exp <- mean(uref.local[,column],na.rm=TRUE)
-                     }
+                    utility.plotcolbox(x,y,"white",u.exp)
                   }
-                  if ( ! ( is.na(u.exp) | is.na(uref.exp) ) ) # illustrate better
-                  {                                           # alternative
-                     color     <- "lightgreen"
-                     color.ref <- "tomato"
-                     if ( uref.exp > u.exp )
-                     {
-                        color     <- "tomato"
-                        color.ref <- "ligthgreen"
-                     }
-                     y.t <- y.box.t
-                     if ( uref.available ) y.t <- 0.5*(y.box.b+y.box.t)
-                     polygon(x   = c(x.box.l,x.box.r,x.box.r,x.box.l,x.box.l),
-                             y   = c(y.box.b,y.box.b,y.t    ,y.t    ,y.box.b),
-                                   col = color,border=NA)
-                     y.b <- 0.5*(y.box.b+y.box.t)
-                     polygon(x   = c(x.box.l,x.box.r,x.box.r,x.box.l,x.box.l),
-                             y   = c(y.b    ,y.b    ,y.box.t,y.box.t,y.b),
-                             col = color.ref,border=NA)
-                  }
-                  if ( ! is.na(u.exp) )
+                  else
                   {
-                     y.t <- y.box.t
-                     if ( uref.available ) y.t <- 0.5*(y.box.b+y.box.t)
-                     lines((x.box.l+u.exp*(x.box.r-x.box.l)*c(1,1)),
-                           c(y.box.b,y.t),lwd=1.5)
-                  }
-                  if ( uref.available )
-                  {
-                     if ( ! is.na(uref.exp) )
-                     {
-                       y.b <- 0.5*(y.box.b+y.box.t)
-                       lines((x.box.l+uref.exp*(x.box.r-x.box.l)*c(1,1)),
-                             c(y.b,y.box.t),lwd=1.5)
-                     }
-                  }
-               }
-               else  # plot quantile summary for value nodes
-               {
-                  column <- match(rownames(str)[i],colnames(u.local))
-                  if ( !is.na(column) )
-                  {
-                     u.vals <- u.local[,column]
-                     if ( sum(!is.na(u.vals)) > 0 )
-                     {
-                        u.vals <- u.vals[!is.na(u.vals)]
-                        u.quant <- quantile(u.vals,probs=c(0.05,0.5,0.95))
-                        if ( u.quant[2]-u.quant[1] < min.median.dev )
-                        {
-                           u.quant[1] <- max(0,u.quant[2]-min.median.dev )
-                        }
-                        if ( u.quant[3]-u.quant[2] < min.median.dev )
-                        {
-                           u.quant[3] <- min(1,u.quant[2]+min.median.dev )
-                        }
-                        y.t <- y.box.t
-                        if ( uref.available ) y.t <- 0.5*(y.box.b+y.box.t)
-
-                        # plot colored 90% credibility interval:
-                        for ( j in floor(num.stripes*u.quant[1]):ceiling(num.stripes*u.quant[3]) )
-                        {
-                           lines((x.box.l+j/num.stripes*(x.box.r-x.box.l)*c(1,1)),
-                                 c(y.box.b,y.t),
-                                 col=utility.get.colors(j/num.stripes,col))
-                        }
-                     
-                        # plot black median line:
-                        lines((x.box.l+u.quant[2]*(x.box.r-x.box.l)*c(1,1)),
-                              c(y.box.b,y.t),lwd=1.5)
-                     }
-                  }
-                  if ( uref.available )
-                  {
-                     column <- match(rownames(str)[i],colnames(uref.local))
-                     if ( !is.na(column) )
-                     {
-                        uref.vals <- uref.local[,column]
-                        if ( sum(!is.na(uref.vals)) > 0 )
-                        {
-                           uref.vals <- uref.vals[!is.na(uref.vals)]
-                           uref.quant <- quantile(uref.vals,probs=c(0.05,0.5,0.95))
-                           if ( uref.quant[2]-uref.quant[1] < min.median.dev )
-                           {
-                              uref.quant[1] <- max(0,uref.quant[2]-min.median.dev )
-                           }
-                           if ( uref.quant[3]-uref.quant[2] < min.median.dev )
-                           {
-                              uref.quant[3] <- min(1,uref.quant[2]+min.median.dev )
-                           }
-                           y.b <- 0.5*(y.box.b+y.box.t)
-
-                           # plot colored 90% credibility interval:
-                           for ( j in floor(num.stripes*uref.quant[1]):ceiling(num.stripes*uref.quant[3]) )
-                           {
-                              lines((x.box.l+j/num.stripes*(x.box.r-x.box.l)*c(1,1)),
-                                    c(y.b,y.box.t),
-                                    col=utility.get.colors(j/num.stripes,col))
-                           }
-                     
-                           # plot black median line:
-                           lines((x.box.l+uref.quant[2]*(x.box.r-x.box.l)*c(1,1)),
-                                 c(y.b,y.box.t),lwd=1.5)
-                        }
-                     }
+                    uref.exp <- NA
+                    column <- match(rownames(str)[i],colnames(uref.local))
+                    if ( !is.na(column) )
+                    {
+                      uref.exp <- mean(uref.local[,column],na.rm=TRUE)
+                    }
+                    col1 <- "lightgreen"
+                    col2 <- "tomato"
+                    if ( u.exp > uref.exp )
+                    {
+                      col1 <- "tomato"
+                      col2 <- "lightgreen"
+                    }
+                    utility.plotcolbox(x,y1,col1,uref.exp)
+                    utility.plotcolbox(x,y2,col2,u.exp)                    
                   }
                }
             }
@@ -1337,14 +1517,14 @@ utility.plothierarchy <-
                         
          # plot bounding box:
 
-         lines(x   = c(x.box.l,x.box.r,x.box.r,x.box.l,x.box.l),
-               y   = c(y.box.b,y.box.b,y.box.t,y.box.t,y.box.b),
+         lines(x   = c(x[1],x[2],x[2],x[1],x[1]),
+               y   = c(y[1],y[1],y[2],y[2],y[1]),
                col = as.character(str$color[i]))
          if ( str$utility[i] )
          {
-            dh <- dh.rel.utility*(y.box.t-y.box.b)
-            lines(c(x.box.l,x.box.r),(y.box.b+dh)*c(1,1))
-            lines(c(x.box.l,x.box.r),(y.box.t-dh)*c(1,1))
+            dh <- dh.rel.utility*(y[2]-y[1])
+            lines(x,(y[1]+dh)*c(1,1))
+            lines(x,(y[2]-dh)*c(1,1))
          }
                   
          # write text into box:
@@ -1377,7 +1557,7 @@ utility.plothierarchy <-
                {
                   y.attrib <- str$y[i] +  (0.5 - (j-0.5)/n)*(1-delta.y)*h
                   text(x.attrib,y.attrib,attributes[j],pos=4,cex=cex.attrib,...)
-                  lines(c(x.box.r,x.attrib),c(y.attrib,y.attrib),lty="dotted")
+                  lines(c(x[2],x.attrib),c(y.attrib,y.attrib),lty="dotted")
                }
             }
          }
@@ -1388,39 +1568,107 @@ utility.plothierarchy <-
 
 
 utility.plottable <- 
-   function(u          = NA,
+   function(node,
+            u,
+            uref       = NA,
             nodes      = NA,
             col        = utility.calc.colors(),
             main       = "",
-            labels     = NA,
             cex.main   = 1,
             cex.nodes  = 1,
             f.reaches  = 0.2,
             f.nodes    = 0.2,
+            levels     = NA,
+            plot.val   = FALSE,
             ...)
 {
    # global parameters:
 
-   delta.x    <- 0.2
-   delta.y    <- 0.2
-   delta.main <- 0.05
-
+   delta.x        <- 0.2
+   delta.y        <- 0.2
+   delta.main     <- 0.05
+   dh.rel.utility <- 0.1
+   
    # initializations:
-     
-   if ( length(dim(u)) != 2 ) return
-   ind.reaches <- 1:nrow(u)
-   ind.nodes <- 1:ncol(u)
-   if ( !is.na(nodes[1]) )
+   
+   if ( !is.list(u) )
    {
-      ind.nodes <- match(nodes,colnames(u))
+      warning("unable to interpret u")
+      return()
+   }
+   if ( length(nodes)==1 & is.na(nodes[1]) ) nodes <- character(0)
+   str <- utility.structure(node)
+   if ( !is.na(levels) )
+   {
+     if ( is.data.frame(str) )
+     {
+       str1 <- utility.prune(str,levels) 
+       ind <- order(str1$level)
+       nodes <- unique(c(nodes,rownames(str1)[ind][str1$level[ind]<=levels]))
+     }
+   }
+   uref.available <- FALSE
+   ind.uref <- NA
+   uref.local <- uref
+   if ( is.data.frame(u) | is.matrix(u) )
+   {
+     if ( length(nodes)==0 ) nodes <- colnames(u)
+     reaches <- rownames(u)
+     if ( is.data.frame(uref) | is.matrix(uref) )
+     {
+       if ( nrow(u) == nrow(uref) )
+       {
+         uref.available <- TRUE
+         ind.uref <- 1:nrow(uref)
+       }
+       else
+       {
+         if ( nrow(uref) == 1 )
+         {
+           uref.available <- TRUE
+           ind.uref <- rep(1,nrow(u))
+         }
+       }
+     }
+   }
+   else
+   {
+     if( length(nodes)==0 ) nodes <- colnames(u[[1]])
+     reaches <- names(u)
+     if ( is.list(uref) | is.matrix(uref) )
+     {
+       if ( !is.data.frame(uref) & !is.matrix(uref) )
+       {
+         if ( length(uref) == length(u) )
+         {
+           ind.uref <- 1:length(u)
+           uref.available <- TRUE
+         }
+         else
+         {
+           if ( length(uref) == 1 )
+           {
+             ind.uref <- rep(1,length(u))
+             uref.available <- TRUE
+           }
+         }
+       }
+       else
+       {
+         uref.local <- list()
+         uref.local[[1]] <- uref
+         ind.uref <- rep(1,length(u))
+         uref.available <- TRUE
+       }
+     }
    }
    
    # set-up plotting parameters and plot frame:
 
-   dx <- (1-f.reaches)/length(ind.nodes)
-   dy <- (1-f.nodes)/length(ind.reaches)
-   x <- f.reaches+(1:length(ind.nodes)-0.5)*dx
-   y <- 1-f.nodes-(1:length(ind.reaches)-0.5)*dy
+   dx <- (1-f.reaches)/length(nodes)
+   dy <- (1-f.nodes)/length(reaches)
+   x <- f.reaches+(1:length(nodes)-0.5)*dx
+   y <- 1-f.nodes-(1:length(reaches)-0.5)*dy
    if ( nchar(main[1]) > 0 )
    {
       y  <- (1-delta.main)*y
@@ -1431,66 +1679,116 @@ utility.plottable <-
    plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),
         xaxt="n",yaxt="n",xlab="",ylab="")
    
-   # write names of reaches:
-
-   if ( nchar(main[1]) > 0 ) text(x=0.5,y=1-0.5*delta.main,label=main[1],cex=cex.main)
-   for ( i in 1:length(ind.reaches) ) 
-   {
-      if ( !is.na(ind.reaches[i]) )
-      {
-         if ( is.na(labels[1]) )
-         {
-            text(x=0,y=y[i],label=rownames(u)[ind.reaches[i]],adj=c(0,0.5),cex=cex.nodes)
-         }
-         else
-         {
-            text(x=0,y=y[i],label=labels[ind.reaches[i]],adj=c(0,0.5),cex=cex.nodes)
-         }
-      }
-   }
-   
    # write and color values:
    
-   for ( i in 1:length(ind.reaches) )
+   for ( i in 1:length(reaches) )
    {
-      for ( j in 1:length(ind.nodes) )
+      for ( j in 1:length(nodes) )
       {
-         if ( !is.na(ind.reaches[i]) & !is.na(ind.nodes[j]) )
+         xbox <- x[j]+0.5*(1-delta.x)*dx*c(-1,1)
+         ybox <- y[i]+0.5*(1-delta.y)*dy*c(-1,1)
+         if ( is.data.frame(u) | is.matrix(u) )
          {
-            color <- "white"
-            val.str <- ""
-            val <- u[ind.reaches[i],ind.nodes[j]]
-            if ( ! is.na(val) )
-            {
-               color <- utility.get.colors(val,col)
+           if ( !is.na(match(reaches[i],rownames(u))) &
+                !is.na(match(nodes[j]  ,colnames(u))) )
+           {
+             yb <- ybox; if ( uref.available ) yb[2] <- 0.5*(ybox[1]+ybox[2])
+             yt <- y[i]; if ( uref.available ) yt <- y[i] - 0.25*(ybox[2]-ybox[1])
+             val <- u[reaches[i],nodes[j]]
+             color <- col
+             if ( !is.na(match(nodes[j],rownames(str))) )
+             {
+               if ( str[nodes[j],"utility"] ) color <- "white"
+             }
+             utility.plotcolbox(xbox,yb,color,val=val,plot.val=plot.val)
+             if ( !is.na(val) )
+             {
                val.str <- paste(round(val,2))
                if ( nchar(val.str) > 1 & substring(val.str,1,1) == "0" )
                {
-                  val.str <- substring(val.str,2)
-                  if ( nchar(val.str) == 2 ) val.str <- paste(val.str,"0",sep="")
+                 val.str <- substring(val.str,2)
+                 if ( nchar(val.str) == 2 ) val.str <- paste(val.str,"0",sep="")
                }
-            }
-            polygon(x   = x[j]+0.5*(1-delta.x)*dx*c(-1,1,1,-1,-1),
-                    y   = y[i]+0.5*(1-delta.y)*dy*c(1,1,-1,-1,1),
-                    col = color)
-            text(x=x[j],y=y[i],val.str,cex=cex.nodes)
+               text(x=x[j],y=yt,val.str,cex=cex.nodes) 
+             }
+           }
+           if ( uref.available )
+           {
+             if ( !is.na(match(nodes[j],colnames(uref))) )
+             {
+               yb <- ybox; if ( uref.available ) yb[1] <- 0.5*(ybox[1]+ybox[2])
+               yt <- y[i]; if ( uref.available ) yt <- y[i] + 0.25*(ybox[2]-ybox[1])
+               val <- uref[ind.uref[i],nodes[j]]
+               color <- col
+               if ( !is.na(match(nodes[j],rownames(str))) )
+               {
+                 if ( str[nodes[j],"utility"] ) color <- "white"
+               }
+               utility.plotcolbox(xbox,yb,color,val=val,plot.val=plot.val)
+               if ( !is.na(val) )
+               {
+                 val.str <- paste(round(val,2))
+                 if ( nchar(val.str) > 1 & substring(val.str,1,1) == "0" )
+                 {
+                   val.str <- substring(val.str,2)
+                   if ( nchar(val.str) == 2 ) val.str <- paste(val.str,"0",sep="")
+                 }
+                 text(x=x[j],y=yt,val.str,cex=cex.nodes) 
+               }
+             }
+           }
+         }
+         else
+         {
+           yb <- ybox; if ( uref.available ) yb[2] <- 0.5*(ybox[1]+ybox[2])
+           if ( !is.na(match(reaches[i],names(u))) &
+                !is.na(match(nodes[j],colnames(u[[reaches[i]]]))) )
+           {
+             val <- u[[reaches[i]]][,nodes[j]]
+             utility.plotquantbox(xbox,yb,col,val,num.stripes=500)
+           }
+           if ( uref.available )
+           {
+             yb <- ybox; yb[1] <- 0.5*(ybox[1]+ybox[2])
+             val <- uref.local[[ind.uref[i]]][,nodes[j]]
+             if ( length(val) > 1 )
+             {
+               utility.plotquantbox(xbox,yb,col,val,num.stripes=500)
+             }
+           }
+         }
+         
+         # plot bounding box:
+         
+         lines(x   = c(xbox[1],xbox[2],xbox[2],xbox[1],xbox[1]),
+               y   = c(ybox[1],ybox[1],ybox[2],ybox[2],ybox[1]),
+               col = as.character(str$color[i]))
+         if ( !is.na(match(nodes[j],rownames(str))) )
+         {
+           if ( str[nodes[j],"utility"] )
+           {
+             dh <- dh.rel.utility*(ybox[2]-ybox[1])
+             lines(xbox,(ybox[1]+dh)*c(1,1))
+             lines(xbox,(ybox[2]-dh)*c(1,1))
+           }
          }
       }
    }
 
+   # write title and names of nodes and reaches:
    
-   # write names of nodes:
+   if ( nchar(main[1]) > 0 ) text(x=0.5,y=1-0.5*delta.main,label=main[1],cex=cex.main)
+   for ( i in 1:length(reaches) ) 
+   {
+     text(x=0,y=y[i],label=reaches[i],adj=c(0,0.5),cex=cex.nodes)
+   }
    
    par(srt=90)
-   for ( j in 1:length(ind.nodes) ) 
+   for ( j in 1:length(nodes) ) 
    {
-      if ( !is.na(ind.nodes[j]) )
-      {
-         text(x=x[j],y=1-f.nodes,
-              label=colnames(u)[ind.nodes[j]],
-              adj=c(0,0.5),cex=cex.nodes)
-      }
+     text(x=x[j],y=1-f.nodes,label=nodes[j],adj=c(0,0.5),cex=cex.nodes)
    }
+   par(srt=0)
    
    # reset plotting parameters:
    
@@ -1506,13 +1804,14 @@ utility.plot <- function(node,
                          col         = utility.calc.colors(),
                          gridlines   = c(0.2,0.4,0.6,0.8),
                          main        = "",
-                         labels      = NA,
                          cex.main    = 1,
                          cex.nodes   = 1,
                          cex.attrib  = 1,
                          f.reaches   = 0.2,
                          f.nodes     = 0.2,
                          with.attrib = TRUE,
+                         levels      = NA,
+                         plot.val    = TRUE,
                          ...)
 {
    if ( type[1] == "nodes" | type[1] == "node" )
@@ -1535,7 +1834,7 @@ utility.plot <- function(node,
          {
             if ( substring(class(node),1,19) == "utility.aggregation" )
             {
-              utility.aggregation.plot(node       = node,
+               utility.aggregation.plot(node       = node,
                                         col        = col,
                                         gridlines  = gridlines,
                                         cex.main   = cex.main,
@@ -1643,6 +1942,8 @@ utility.plot <- function(node,
                                   cex.nodes   = cex.nodes,
                                   cex.attrib  = cex.attrib,
                                   with.attrib = with.attrib,
+                                  levels      = levels,
+                                  plot.val    = plot.val,
                                   ...)
          }
          if ( ! is.na(nodes[1]) )
@@ -1671,19 +1972,19 @@ utility.plot <- function(node,
       {
          if ( type[1] == "table" )
          {
-            if ( length(dim(u)) == 2 )
-            {
-               utility.plottable(u          = u,
-                                 nodes      = nodes,
-                                 col        = col,
-                                 main       = main,
-                                 labels     = labels,
-                                 cex.main   = cex.main,
-                                 cex.nodes  = cex.nodes,
-                                 f.reaches  = f.reaches,
-                                 f.nodes    = f.nodes,
-                                 ...)
-            }
+           utility.plottable(node       = node,
+                             u          = u,
+                             uref       = uref,
+                             nodes      = nodes,
+                             col        = col,
+                             main       = main,
+                             cex.main   = cex.main,
+                             cex.nodes  = cex.nodes,
+                             f.reaches  = f.reaches,
+                             f.nodes    = f.nodes,
+                             levels     = levels,
+                             plot.val   = plot.val,
+                             ...)
          }
          else
          {
@@ -1759,24 +2060,24 @@ utility.endnode.intpol1d.create <- function(name.node,    # character(1)
    # construct class:
    
    node <- list()
-   node$name        <- name.node
-   node$description <- "utility/value 1d interpolation end node" 
-   node$type        <- "endnode"
-   node$attrib      <- name.attrib
-   node$range       <- range
-   node$x           <- x
-   node$u           <- u
-   node$names.x     <- names.x
-   node$names.u     <- names.u
-   node$required    <- required
-   node$utility     <- utility
-   node$col         <- col
+   node$name         <- name.node
+   node$description  <- "utility/value 1d interpolation end node" 
+   node$type         <- "endnode"
+   node$attrib       <- name.attrib
+   node$range        <- range
+   node$x            <- x
+   node$u            <- u
+   node$names.x      <- names.x
+   node$names.u      <- names.u
+   node$required     <- required
+   node$utility      <- utility
+   node$col          <- col
    node$shift.levels <- shift.levels
-   class(node)      <- "utility.endnode.intpol1d" 
+   class(node)       <- "utility.endnode.intpol1d" 
    
    # print and return class
 
-   cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
+   #cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
    return(node)
 }
 
@@ -1978,11 +2279,11 @@ utility.endnode.intpol2d.create <- function(name.node,   # character(1)
                                                          # x, y, and, optionally
                                                          # names.x, names.y
                                             u,           # numeric(n)
-                                            names.u     = rep(NA,length(u)),
-                                            lead        = 0,
-                                            utility     = TRUE,
-                                            required    = FALSE,
-                                            col         = "black",
+                                            names.u      = rep(NA,length(u)),
+                                            lead         = 0,
+                                            utility      = TRUE,
+                                            required     = FALSE,
+                                            col          = "black",
                                             shift.levels = 0)
 {
    # consistency checks:
@@ -2086,24 +2387,24 @@ utility.endnode.intpol2d.create <- function(name.node,   # character(1)
    # construct class:
    
    node <- list()
-   node$name        <- name.node
-   node$description <- "utility/value 2d interpolation end node"
-   node$type        <- "endnode"
-   node$attrib      <- name.attrib
-   node$ranges      <- ranges
-   node$isolines    <- isolines
-   node$u           <- u
-   node$names.u     <- names.u
-   node$lead        <- lead
-   node$required    <- required
-   node$utility     <- utility
-   node$col         <- col
+   node$name         <- name.node
+   node$description  <- "utility/value 2d interpolation end node"
+   node$type         <- "endnode"
+   node$attrib       <- name.attrib
+   node$ranges       <- ranges
+   node$isolines     <- isolines
+   node$u            <- u
+   node$names.u      <- names.u
+   node$lead         <- lead
+   node$required     <- required
+   node$utility      <- utility
+   node$col          <- col
    node$shift.levels <- shift.levels
-   class(node)      <- "utility.endnode.intpol2d" 
+   class(node)       <- "utility.endnode.intpol2d" 
    
    # print and return class
 
-   cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
+   #cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
    return(node)
 }
 
@@ -2369,10 +2670,10 @@ utility.endnode.parfun1d.create <- function(name.node,    # character(1)
                                             range,        # numeric(2)
                                             name.fun,     # name of f(a,par)
                                             par,          # numeric(n)
-                                            names.par   = rep(NA,length(par)),
-                                            utility     = TRUE,
-                                            required    = FALSE,
-                                            col         = "black",
+                                            names.par    = rep(NA,length(par)),
+                                            utility      = TRUE,
+                                            required     = FALSE,
+                                            col          = "black",
                                             shift.levels = 0)
 {
    # consistency checks:
@@ -2400,23 +2701,23 @@ utility.endnode.parfun1d.create <- function(name.node,    # character(1)
    # construct class:
    
    node <- list()
-   node$name        <- name.node
-   node$description <- "utility/value 1d parametric function end node"
-   node$type        <- "endnode"
-   node$attrib      <- name.attrib
-   node$range       <- range
-   node$name.fun    <- name.fun
-   node$par         <- par
-   node$names.par   <- names.par
-   node$required    <- required
-   node$utility     <- utility
-   node$col         <- col
+   node$name         <- name.node
+   node$description  <- "utility/value 1d parametric function end node"
+   node$type         <- "endnode"
+   node$attrib       <- name.attrib
+   node$range        <- range
+   node$name.fun     <- name.fun
+   node$par          <- par
+   node$names.par    <- names.par
+   node$required     <- required
+   node$utility      <- utility
+   node$col          <- col
    node$shift.levels <- shift.levels
-   class(node)      <- "utility.endnode.parfun1d" 
+   class(node)       <- "utility.endnode.parfun1d" 
    
    # print and return class
    
-   cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
+   #cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
    return(node)
 }
 
@@ -2600,10 +2901,10 @@ plot.utility.endnode.parfun1d <-
 utility.endnode.discrete.create <- function(name.node,          # character(1)
                                             attrib.levels,      # data.frame
                                             u,                  # numeric(n)
-                                            names.u     = rep(NA,length(u)),
-                                            utility     = TRUE,
-                                            required    = FALSE,
-                                            col         = "black",
+                                            names.u      = rep(NA,length(u)),
+                                            utility      = TRUE,
+                                            required     = FALSE,
+                                            col          = "black",
                                             shift.levels = 0)
 {
    # consistency checks:
@@ -2649,18 +2950,18 @@ utility.endnode.discrete.create <- function(name.node,          # character(1)
    {
       node$attrib.levels[,i] <- as.character(node$attrib.levels[,i])
    }
-   node$attrib        <- names(attrib.levels)
-   node$u             <- u
-   node$names.u       <- names.u
-   node$required      <- required
-   node$utility       <- utility
-   node$col           <- col
-   node$shift.levels   <- shift.levels
-   class(node)        <- "utility.endnode.discrete" 
+   node$attrib       <- names(attrib.levels)
+   node$u            <- u
+   node$names.u      <- names.u
+   node$required     <- required
+   node$utility      <- utility
+   node$col          <- col
+   node$shift.levels <- shift.levels
+   class(node)       <- "utility.endnode.discrete" 
    
    # print and return class
    
-   cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
+   #cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
    return(node)
 }
 
@@ -2863,6 +3164,8 @@ plot.utility.endnode.discrete <-
                                   cex.main  = 1,
                                   ...)
 {
+   # plot frame:
+                           
    node <- x
    length = 101
    n <- updatepar(node,par)
@@ -2871,27 +3174,37 @@ plot.utility.endnode.discrete <-
    plot(numeric(0),numeric(0),type="l",
         xlim=c(0,1),ylim=c(0,1),
         xlab=paste(n$attrib,collapse=","),ylab=funtype,main=title,
-        xaxs="i",yaxs="i",xaxt="n",cex.main=cex.main,...)
+        xaxs="i",yaxs="i",yaxt="n",xaxt="n",cex.main=cex.main,...)
+
+   # colored bar along y axis:
+   
+   if ( length(col)>1 & !node$utility )
+   {
+      num.grid = 100
+      endpoints <- seq(0,1,length.out=num.grid+1)+1/(2*num.grid)
+      midpoints <- 0.5*(endpoints[-1]+endpoints[-length(endpoints)])
+      cols <- utility.get.colors(midpoints,col)
+      for ( i in 1:(num.grid-1) )
+      {
+        lines(-0.01*c(1,1),endpoints[c(i,i+1)],col=cols[i],lwd=3,lend=2,xpd=TRUE)
+      }
+   }
+   
+   # axes (should overly colored bar):
+   
    labels=character(length(n$u))
    for ( i in 1:length(n$u) )
    {
       labels[i] <- paste(as.character(n$attrib.levels[i,]),collapse=",")
    }
    axis(side=1,at=((1:length(n$u))-0.5)/length(n$u),labels=labels)
+   axis(side=2)
    
-   # color axis and plot gridlines:
+   # plot gridlines:
    
-   if ( length(col)>1 & !node$utility )
+   if ( !node$utility )
    {
-      du <- 1/(length-1)
-      midpoints <- seq(du,1-du,length=length-1)
-      cols <- utility.get.colors(midpoints,col)
-      for ( i in 1:(length-1) )
-      {
-         lines(c(1,1)*0.001,
-               c((i-1)*du,i*du),col=cols[i],lwd=3)
-      }
-      if ( ! is.na(gridlines[1]) )
+      if ( !is.na(gridlines[1]) )
       {
          for ( level in gridlines ) abline(h=level,lty="dashed")
       }
@@ -2916,9 +3229,9 @@ plot.utility.endnode.discrete <-
 utility.endnode.cond.create <- function(name.node,          # character(1)
                                         attrib.levels,      # data.frame
                                         nodes,              # list of nodes
-                                        utility     = TRUE,
-                                        required    = FALSE,
-                                        col         = "black",
+                                        utility      = TRUE,
+                                        required     = FALSE,
+                                        col          = "black",
                                         shift.levels = 0)
 {
    # consistency checks:
@@ -2984,12 +3297,12 @@ utility.endnode.cond.create <- function(name.node,          # character(1)
    node$required      <- required
    node$utility       <- utility
    node$col           <- col
-   node$shift.levels   <- shift.levels
+   node$shift.levels  <- shift.levels
    class(node)        <- "utility.endnode.cond" 
    
    # print return class
    
-   cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
+   #cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
    return(node)
 }
 
@@ -3223,7 +3536,7 @@ utility.aggregation.create <-
                            required     = FALSE,
                            num.required = 1,
                            col          = "black",
-                           shift.levels  = 0)
+                           shift.levels = 0)
 {
    # consistency checks:
 
@@ -3278,7 +3591,7 @@ utility.aggregation.create <-
    
    # return class
    
-   cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
+   #cat(node$description," \"",name.node,"\" constructed","\n",sep="")   
    return(node)
 }
 
@@ -3486,6 +3799,8 @@ plot.utility.aggregation <-
                             f.reaches   = 0.2,
                             f.nodes     = 0.2,
                             with.attrib = TRUE,
+                            levels      = NA,
+                            plot.val    = TRUE,
                             ...)
 {
    node <- x
@@ -3504,6 +3819,8 @@ plot.utility.aggregation <-
                 f.reaches   = f.reaches,
                 f.nodes     = f.nodes,
                 with.attrib = with.attrib,
+                levels      = levels,
+                plot.val    = plot.val,
                 ...)
 }
 
@@ -3521,10 +3838,10 @@ utility.conversion.intpol.create <- function(name.node,    # character(1)
                                              node,         # character(1)
                                              x,            # numeric(n)
                                              u,            # numeric(n)
-                                             names.x     = rep(NA,length(x)),
-                                             names.u     = rep(NA,length(u)),
-                                             required    = FALSE,
-                                             col         = "black",
+                                             names.x      = rep(NA,length(x)),
+                                             names.u      = rep(NA,length(u)),
+                                             required     = FALSE,
+                                             col          = "black",
                                              shift.levels = 0)
 {
    # consistency checks:
@@ -3576,12 +3893,12 @@ utility.conversion.intpol.create <- function(name.node,    # character(1)
    n$num.required <- 1
    n$utility      <- TRUE
    n$col          <- col
-   n$shift.levels  <- shift.levels
+   n$shift.levels <- shift.levels
    class(n)       <- "utility.conversion.intpol" 
    
    # print and return class
 
-   cat(n$description," \"",name.node,"\" constructed","\n",sep="")   
+   #cat(n$description," \"",name.node,"\" constructed","\n",sep="")   
    return(n)
 }
 
@@ -3631,6 +3948,7 @@ updatepar.utility.conversion.intpol <- function(x,par=NA,...)
          }
       } 
    }
+   n$nodes[[1]] <- updatepar(n$nodes[[1]],par)
    
    # return updated node:
    
@@ -3740,6 +4058,8 @@ plot.utility.conversion.intpol <-
                             f.reaches   = 0.2,
                             f.nodes     = 0.2,
                             with.attrib = TRUE,
+                            levels      = NA,
+                            plot.val    = TRUE,
                             ...)
 {
    node <- x
@@ -3758,6 +4078,8 @@ plot.utility.conversion.intpol <-
                 f.reaches   = f.reaches,
                 f.nodes     = f.nodes,
                 with.attrib = with.attrib,
+                levels      = levels,
+                plot.val    = plot.val,
                 ...)
 }
 
@@ -3775,9 +4097,9 @@ utility.conversion.parfun.create <- function(name.node,    # character(1)
                                              node,         # node
                                              name.fun,     # name of f(a,par)
                                              par,          # numeric(n)
-                                             names.par   = rep(NA,length(par)),
-                                             required    = FALSE,
-                                             col         = "black",
+                                             names.par    = rep(NA,length(par)),
+                                             required     = FALSE,
+                                             col          = "black",
                                              shift.levels = 0)
 {
    # consistency checks:
@@ -3816,12 +4138,12 @@ utility.conversion.parfun.create <- function(name.node,    # character(1)
    n$num.required <- 1
    n$utility      <- TRUE
    n$col          <- col
-   n$shift.levels  <- shift.levels
+   n$shift.levels <- shift.levels
    class(n)       <- "utility.conversion.parfun" 
    
    # print and return class
    
-   cat(n$description," \"",name.node,"\" constructed","\n",sep="")   
+   #cat(n$description," \"",name.node,"\" constructed","\n",sep="")   
    return(n)
 }
 
@@ -3857,6 +4179,7 @@ updatepar.utility.conversion.parfun <- function(x,par=NA,...)
          }
       } 
    }
+   n$nodes[[1]] <- updatepar(n$nodes[[1]],par)
    
    # return updated node:
    
@@ -3968,6 +4291,8 @@ plot.utility.conversion.parfun <-
                             f.reaches   = 0.2,
                             f.nodes     = 0.2,
                             with.attrib = TRUE,
+                            levels      = NA,
+                            plot.val    = TRUE,
                             ...)
 {
    node <- x
@@ -3985,6 +4310,8 @@ plot.utility.conversion.parfun <-
                 f.reaches   = f.reaches,
                 f.nodes     = f.nodes,
                 with.attrib = with.attrib,
+                levels      = levels,
+                plot.val    = plot.val,
                 ...)
 }
 

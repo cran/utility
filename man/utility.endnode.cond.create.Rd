@@ -29,7 +29,7 @@ This may be a dependence on any number of attributes.
 As combinatorics can lead to a very large number of possible combinations, the node should not depend on a too large number of attributes, in particular if each attribute has many different levels expressed by numbers or character strings.
 }
   \item{nodes}{
-vector of the length of the number of columns of the data frame specifed as argument \code{attrib.levels} above containing the nodes to be associated with the attriute level combinations specified in the rows of \code{attrib.levels}.
+list of the length of the number of columns of the data frame specifed as argument \code{attrib.levels} above containing the nodes to be associated with the attribute level combinations specified in the rows of \code{attrib.levels}.
 }
   \item{utility}{
 (optional) logical variable indicating if a value function (\code{FALSE}) or a utility function (\code{TRUE}) is created.
@@ -57,9 +57,9 @@ The function returns the created object of type \code{utility.endnode.cond} with
 \references{
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
-Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software, in press. \cr\cr
+Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software 46, 283-291, 2013. \cr\cr
 Textbooks on the use of utility and value functions in decision analysis: \cr\cr
-Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives. Cambridge University Press, 1993. First published in 1976. \cr\cr
+Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives - Preferences and Value Tradeoffs. John Wiley & Sons, 1976. \cr\cr
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.
 }
 

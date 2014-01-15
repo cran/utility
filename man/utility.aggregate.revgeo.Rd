@@ -1,13 +1,17 @@
-\name{utility.aggregate.min}
+\name{utility.aggregate.revgeo}
 
-\alias{utility.aggregate.min}
+\alias{utility.aggregate.revgeo}
 
-\title{Minimum aggregation of values or utilities}
+\title{Reverse geometric aggregation of values or utilities}
 
-\description{Function to perform a minimum aggregation of values or utilities.}
+\description{
+Function to perform a reverse geometric aggregation 
+(unity minus the weighted geometric mean of unity minus the arguments) 
+of values or utilities.
+}
 
 \usage{
-utility.aggregate.min(u, par = NA)
+utility.aggregate.revgeo(u, par)
 }
 
 \arguments{
@@ -15,13 +19,16 @@ utility.aggregate.min(u, par = NA)
 numeric vector of values or utilities to be aggregated.
 }
   \item{par}{
-unused argument used for compatibility with other aggregation techniques
-that require parameters.
+numeric vector of weights for calculating the reverse weighted geometric mean 
+of the values provided in the argument \code{u}.
+The weights need not be normalized, they will be normalized before use.
+In case of missing values in the vector \code{u}, the weights of the
+non-missing components will be rescaled to sum to unity.
 }
 }
 
 \value{
-minimum of the components of \code{u}.
+The function returns the aggregated value or utility.
 }
 
 \references{
@@ -42,11 +49,11 @@ Constructor of aggregation node: \cr\cr
 \code{\link{utility.aggregation.create}} \cr\cr
 Alternative aggregation techniques: \cr\cr
 \code{\link{utility.aggregate.add}}, \cr
+\code{\link{utility.aggregate.min}}, \cr
 \code{\link{utility.aggregate.max}}, \cr
 \code{\link{utility.aggregate.cobbdouglas}}, \cr
 \code{\link{utility.aggregate.geo}}, \cr
 \code{\link{utility.aggregate.geooff}}, \cr
-\code{\link{utility.aggregate.revgeo}}, \cr
 \code{\link{utility.aggregate.revgeooff}}, \cr
 \code{\link{utility.aggregate.harmo}}, \cr
 \code{\link{utility.aggregate.harmooff}}, \cr
@@ -57,6 +64,6 @@ Alternative aggregation techniques: \cr\cr
 }
 
 \examples{
-utility.aggregate.min(c(0.2,0.8))
+utility.aggregate.revgeo(c(0.2,0.8), par=c(1,1))
 }
 
