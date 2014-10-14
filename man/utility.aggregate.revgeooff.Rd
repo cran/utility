@@ -35,6 +35,10 @@ The function returns the aggregated value or utility.
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
 Constructing, evaluating and visualizing value and utility functions for decision support, Environmental Modelling & Software 46, 283-291, 2013. \cr\cr
+Description of aggregation techniques: \cr\cr
+Langhans, S.D., Reichert, P. and Schuwirth, N.,
+The method matters: A guide for indicator aggregation in ecological assessments. 
+Ecological Indicators 45, 494-507, 2014. \cr\cr
 Textbooks on the use of utility and value functions in decision analysis: \cr\cr
 Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives - Preferences and Value Tradeoffs. John Wiley & Sons, 1976. \cr\cr
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.
@@ -60,10 +64,11 @@ Alternative aggregation techniques: \cr\cr
 \code{\link{utility.aggregate.revharmo}}, \cr
 \code{\link{utility.aggregate.revharmooff}}, \cr
 \code{\link{utility.aggregate.mult}}, \cr
-\code{\link{utility.aggregate.mix}}.
+\code{\link{utility.aggregate.mix}}, \cr
+\code{\link{utility.aggregate.addmin}}.
 }
 
 \examples{
-utility.aggregate.revgeooff(c(0.2,0.8), par=c(1,1))
+utility.aggregate.revgeooff(c(0.2,0.8), par=c(1,1,0.1))
 }
 

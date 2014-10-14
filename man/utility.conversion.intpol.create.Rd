@@ -83,8 +83,9 @@ Create end nodes with \cr\cr
 \code{\link{utility.endnode.discrete.create}}, \cr
 \code{\link{utility.endnode.parfun1d.create}}, \cr
 \code{\link{utility.endnode.intpol2d.create}}, \cr
-\code{\link{utility.endnode.parfun1d.create}}, or \cr
-\code{\link{utility.endnode.cond.create}}. \cr\cr
+\code{\link{utility.endnode.parfun1d.create}}, \cr
+\code{\link{utility.endnode.cond.create}}, or \cr
+\code{\link{utility.endnode.firstavail.create}}. \cr\cr
 Create aggregation nodes with \cr\cr
 \code{\link{utility.aggregation.create}}.
 }

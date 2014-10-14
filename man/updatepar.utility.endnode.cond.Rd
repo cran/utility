@@ -42,11 +42,12 @@ Peter Reichert <peter.reichert@eawag.ch>
 }
 
 \seealso{
-See \code{\link{utility.endnode.parfun1d.create}} for how to construct such a node and \cr\cr
+See \code{\link{utility.endnode.cond.create}} for how to construct such a node and \cr\cr
 \code{\link{updatepar.utility.endnode.discrete}} \cr
 \code{\link{updatepar.utility.endnode.intpol1d}} \cr
 \code{\link{updatepar.utility.endnode.parfun1d}} \cr
 \code{\link{updatepar.utility.endnode.intpol2d}} \cr
+\code{\link{updatepar.utility.endnode.firstavail}} \cr
 \code{\link{updatepar.utility.aggregation}} \cr
 \code{\link{updatepar.utility.conversion.intpol}} \cr
 \code{\link{updatepar.utility.conversion.parfun}} \cr

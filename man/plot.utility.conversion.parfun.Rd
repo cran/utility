@@ -26,6 +26,7 @@ Plot node definition or underlying objectives hierarchy.
      with.attrib = TRUE,
      levels      = NA,
      plot.val    = TRUE,
+     print.val   = TRUE,
      ...)
 }
 
@@ -126,6 +127,9 @@ Otherwise, the medians and colored boxes indicating 90\% credibility or occurren
 }
   \item{plot.val}{
 (optional) plot value as a vertical line within the box.
+}
+  \item{print.val}{
+(optional) print value as a number when plotting a table of boxes.
 }
   \item{\dots}{
 additional arguments passed to the R plotting routine.

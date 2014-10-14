@@ -75,9 +75,10 @@ Print, evaluate and plot the node with \cr\cr
 \code{\link{plot.utility.endnode.cond}}. \cr\cr
 Create other end nodes with  \cr\cr
 \code{\link{utility.endnode.discrete.create}}, \cr
-\code{\link{utility.endnode.intpol1d.create}}, \cr
+\code{\link{utility.endnode.parfun1d.create}}, \cr
+\code{\link{utility.endnode.intpol2d.create}}, \cr
 \code{\link{utility.endnode.parfun1d.create}}, or \cr
-\code{\link{utility.endnode.intpol2d.create}}, \cr\cr
+\code{\link{utility.endnode.firstavail.create}}. \cr\cr
 Create other types of nodes with \cr\cr
 \code{\link{utility.aggregation.create}}, \cr
 \code{\link{utility.conversion.intpol.create}}, or \cr

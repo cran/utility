@@ -54,6 +54,7 @@ Note that the plotting routines for the other end nodes \cr
 \code{\link{plot.utility.endnode.parfun1d}} \cr
 \code{\link{plot.utility.endnode.intpol2d}} \cr
 \code{\link{plot.utility.endnode.cond}} \cr
+\code{\link{plot.utility.endnode.firstavail}} \cr
 are as far as possible the same so that all end nodes can be plotted with the same commands irrespective of the type of the end node.
 }
 

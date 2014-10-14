@@ -50,15 +50,16 @@ Peter Reichert <peter.reichert@eawag.ch>
 }
 
 \seealso{
-\code{\link{utility.aggregation.create}} to create the node, \cr
-\code{\link{print.utility.aggregation}} or 
-\code{\link{summary.utility.aggregation}} to print its definition, and \cr
-\code{\link{plot.utility.aggregation}} to plot the node \cr\cr
+\code{\link{utility.endnode.cond.create}} to create the node, \cr
+\code{\link{print.utility.endnode.cond}} or 
+\code{\link{summary.utility.endnode.cond}} to print its definition, and \cr
+\code{\link{plot.utility.endnode.cond}} to plot the node \cr\cr
 and \cr\cr
 \code{\link{utility.endnode.discrete.create}}, \cr
 \code{\link{utility.endnode.intpol1d.create}}, \cr
 \code{\link{utility.endnode.parfun1d.create}}, \cr
 \code{\link{utility.endnode.intpol2d.create}}, \cr
+\code{\link{utility.endnode.firstavail.create}}, \cr
 \code{\link{utility.aggregation.create}}, \cr
 \code{\link{utility.conversion.intpol.create}}, \cr
 \code{\link{utility.conversion.parfun.create}} \cr\cr

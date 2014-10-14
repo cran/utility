@@ -61,6 +61,7 @@ and \cr\cr
 \code{\link{utility.endnode.parfun1d.create}}, \cr
 \code{\link{utility.endnode.intpol2d.create}}, \cr
 \code{\link{utility.endnode.cond.create}}, \cr
+\code{\link{utility.endnode.firstavail.create}}, \cr
 \code{\link{utility.aggregation.create}}, \cr
 \code{\link{utility.conversion.intpol.create}} \cr\cr
 to create other nodes.

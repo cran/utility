@@ -47,6 +47,7 @@ See \code{\link{utility.endnode.parfun1d.create}} for how to construct such a no
 \code{\link{updatepar.utility.endnode.parfun1d}} \cr
 \code{\link{updatepar.utility.endnode.intpol2d}} \cr
 \code{\link{updatepar.utility.endnode.cond}} \cr
+\code{\link{updatepar.utility.endnode.firstavail}} \cr
 \code{\link{updatepar.utility.aggregation}} \cr
 \code{\link{updatepar.utility.conversion.intpol}} \cr
 \code{\link{updatepar.utility.conversion.parfun}} \cr

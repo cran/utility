@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab utility\cr
 Type: \tab Package\cr
-Version: \tab 1.2\cr
-Date: \tab 2014-01-15\cr
+Version: \tab 1.3\cr
+Date: \tab 2014-10-14\cr
 License: \tab GPL (>= 2)\cr
 }
 An objective hierarchy and an associated value or utility function 
@@ -36,15 +36,20 @@ function that is implemented as a function in R.
 End nodes of the class \code{utility.endnode.intpol2d} implement
 interpolated value or utility functions that are based on two
 attributes.
-Finally, end nodes of the class \code{utility.endnode.cond} implement
+End nodes of the class \code{utility.endnode.cond} implement
 value or utility functions that assign different value or utility
 functions to a finite set of attribute combinations.
+Finally, end nodes of the class \code{utility.endnode.firstavail} implement
+value or utility functions that try to evaluate a list of nodes and 
+return the value of the first node that could be evaluated based
+on the provided attribute data.
 These end nodes can be implemented by using the following constructors. \cr\cr 
 \code{\link{utility.endnode.discrete.create}} \cr
 \code{\link{utility.endnode.intpol1d.create}} \cr
 \code{\link{utility.endnode.parfun1d.create}} \cr
 \code{\link{utility.endnode.intpol2d.create}} \cr
-\code{\link{utility.endnode.cond.create}} \cr\cr
+\code{\link{utility.endnode.cond.create}} \cr
+\code{\link{utility.endnode.firstavail.create}} \cr\cr
 To advance to higher hierarchical levels, values or utilities at lower
 levels must be aggregated to the next higher level.
 This is done ab aggregation nodes of the class \code{utility.aggregation}.
@@ -307,14 +312,13 @@ plot(widthvar)
 plot(widthvar,par=c(u_moderate=0.2))
 plot(bedmod_other)
 plot(bankmod)
-plot(riparzone_width)
+#plot(riparzone_width)   # too slow for package installation
 
 # plot selected node definitions of a hierarchy
 
 plot(morphol,type="nodes",nodes=c("width variability",
                                   "bed modification other",
-                                  "bank modification",
-                                  "riparian zone width"))
+                                  "bank modification"))
 
 # evaluate value function for data sets and plot colored hierarchies
 # and table
@@ -348,12 +352,19 @@ plot(morphol,u=res_channelized_add)
 plot(morphol,u=res_rehab)
 plot(morphol,u=res_rehab,uref=res_channelized)
 plot(morphol,u=res_both,type="table",plot.val=FALSE)
+plot(morphol,u=res_both,type="table",plot.val=FALSE,print.val=FALSE)
 plot(morphol,u=res_both,uref=res_channelized,type="table",plot.val=FALSE)
 
-# consideration of uncertain attribute levels (higher uncertainty for 
-# predicted state after rehabilitation than for observed channelized state):
+# consideration of uncertain attribute levels 
+# (Higher uncertainty for predicted state after rehabilitation than for 
+# observed channelized state.
+# Note that the normal distributions lead to a small probability of attribute 
+# levels beyond the range for which the value function is defined. This could
+# be corrected for by truncating or choosing another distribution. We keep 
+# those values to demonstrate that this leads to warnings when evaluating the
+# value function for these attribute levels,):
 
-sampsize <- 2000
+sampsize <- 1000
 
 attrib_channelized_unc <- data.frame(
   widthvariability_class = rep("high",sampsize),
@@ -379,7 +390,7 @@ res_channelized_unc <- evaluate(morphol,attrib=attrib_channelized_unc)
 res_rehab_unc       <- evaluate(morphol,attrib=attrib_rehab_unc)
 
 plot(morphol,u=res_channelized_unc)
-plot(morphol,u=res_rehab_unc)
+#plot(morphol,u=res_rehab_unc)
 plot(morphol,u=res_rehab_unc,uref=res_channelized_unc)
 plot(morphol,u=list(channelized=res_channelized_unc,rehabilitated=res_rehab_unc),
      type="table")
@@ -387,8 +398,6 @@ plot(morphol,u=list(channelized=res_channelized_unc,rehabilitated=res_rehab_unc)
      type="table",nodes=c("ecomorphology","riparian zone"))
 plot(morphol,u=list(channelized=res_channelized_unc,rehabilitated=res_rehab_unc),
      type="table",levels=2)
-plot(morphol,u=list(channelized=res_channelized_unc,rehabilitated=res_rehab_unc),
-     type="table",levels=1)
 plot(morphol,u=list(channelized=res_channelized_unc,rehabilitated=res_rehab_unc),
      uref=res_channelized_unc,
      type="table")
