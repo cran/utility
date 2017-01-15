@@ -15,7 +15,8 @@ utility.aggregation.create(name.node,
                            required     = FALSE, 
                            num.required = 1, 
                            col          = "black", 
-                           shift.levels = 0)
+                           shift.levels = 0,
+                           add.arg.fun  = NULL)
 }
 
 \arguments{
@@ -30,23 +31,29 @@ name of the function to be used for aggregation.
 This function must accept the arguments \code{u} and \code{par} which
 pass a vector of values or utilities to be aggregated and the parameters
 of the function, respectively.
-The function must then return the corresponding aggregated value or utility.
+The function can have an additional argument specified below as \code{add.arg.fun}.
+The function must then return the corresponding aggregated value or utility.\cr
 Examples of functions provided by the package are \cr
-\code{\link{utility.aggregate.add}} for additive aggregation, \cr
+\code{\link{utility.aggregate.add}} for additive aggregation (weighted arithmetic mean), \cr
 \code{\link{utility.aggregate.min}} for minimum aggregation, \cr
 \code{\link{utility.aggregate.max}} for maximum aggregation, \cr
-\code{\link{utility.aggregate.geo}} or \cr
-\code{\link{utility.aggregate.cobbdouglas}} for geometric or Cobb-Douglas aggregation, \cr
+\code{\link{utility.aggregate.geo}} or \code{\link{utility.aggregate.cobbdouglas}} for geometric or Cobb-Douglas aggregation (weighted geometric mean), \cr
 \code{\link{utility.aggregate.geooff}} for geometric aggregation with offset, \cr
 \code{\link{utility.aggregate.revgeo}} for reverse geometric aggregation, \cr
 \code{\link{utility.aggregate.revgeooff}} for reverse geometric aggregation with offset, \cr
-\code{\link{utility.aggregate.harmo}} for harmonic aggregation, \cr
+\code{\link{utility.aggregate.harmo}} for harmonic aggregation (weighted harmonic mean), \cr
 \code{\link{utility.aggregate.harmooff}} for harmonic aggregation with offset, \cr
 \code{\link{utility.aggregate.revharmo}} for reverse harmonic aggregation, \cr
 \code{\link{utility.aggregate.revharmooff}} for reverse harmonic aggregation with offset, \cr
 \code{\link{utility.aggregate.mult}} for multiplicative aggregation, \cr
 \code{\link{utility.aggregate.mix}} for a mixture of additive, minimum, and geometric aggregation, \cr
-\code{\link{utility.aggregate.addmin}} for a mixture of additive and minimum aggregation.
+\code{\link{utility.aggregate.addmin}} for a mixture of additive and minimum aggregation. \cr
+\code{\link{utility.aggregate.addpower}} for additive power aggregation (weighted power mean), \cr
+\code{\link{utility.aggregate.revaddpower}} for reverse additive power aggregation, \cr
+\code{\link{utility.aggregate.addsplitpower}} for splitted additive power aggregation, \cr
+\code{\link{utility.aggregate.revaddsplitpower}} for reverse splitted additive power aggregation, \cr
+\code{\link{utility.aggregate.bonusmalus}} for an aggregation technique that considers some of the values or utilities of sub-objectives only as bonus or malus. \cr
+Follow the links for the aggregation functions for their use, for the underlying mathematical expressions and for graphical illustrations.
 }                                                          
   \item{par}{
 numeric vector of parameter values to be passed to the function specified unter \code{name.fun}.
@@ -70,6 +77,10 @@ Default value is \code{"black"}.
   \item{shift.levels}{
 (optional) number of hierarchical levels by which the node in the objective hierarchy is shifted to make a branch fit better to other branches.
 Default value is \code{0}.
+}
+  \item{add.arg.fun}{
+(optional) an additional argument to the aggregation function \code{name.fun}.
+The value(s) given here will alway be passed to the aggregation function.
 }
 }
 

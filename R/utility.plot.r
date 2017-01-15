@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.3                                        Peter Reichert 05.10.2014 #
+# version 1.4                                        Peter Reichert 05.06.2016 #
 #                                                                              #
 ################################################################################
 
@@ -192,13 +192,13 @@ utility.aggregation.plot <- function(node           = node,
 
       # colored bar along axes:
       
-      endpoints <- seq(0,1,length.out=num.grid+1)+1/(2*num.grid)
+      endpoints <- seq(0,1,length.out=10*num.grid+1)
       midpoints <- 0.5*(endpoints[-1]+endpoints[-length(endpoints)])
       cols <- utility.get.colors(midpoints,col)
-      for ( i in 1:(num.grid-1) )
+      for ( i in 1:(10*num.grid-1) )
       {
-        lines(-0.01*c(1,1),endpoints[c(i,i+1)],col=cols[i],lwd=3,lend=2,xpd=TRUE)
-        lines(endpoints[c(i,i+1)],-0.01*c(1,1),col=cols[i],lwd=3,lend=2,xpd=TRUE)
+        lines(-0.015*c(1,1),endpoints[c(i,i+1)],col=cols[i],lwd=6,lend=2,xpd=TRUE)
+        lines(endpoints[c(i,i+1)],-0.015*c(1,1),col=cols[i],lwd=6,lend=2,xpd=TRUE)
       }
       
       # axes (should overly colored bar):
@@ -365,6 +365,7 @@ utility.plothierarchy <-
             with.attrib = TRUE,
             levels      = NA,
             plot.val    = TRUE,
+            two.lines   = FALSE,
             ...)
 {
    # call multiple times if u and possibly uref are lists:
@@ -388,6 +389,7 @@ utility.plothierarchy <-
                                      with.attrib = with.attrib,
                                      levels      = levels,
                                      plot.val    = plot.val,
+                                     two.lines   = two.lines,
                                      ...)
             }
          }
@@ -409,6 +411,7 @@ utility.plothierarchy <-
                               with.attrib = with.attrib,
                               levels      = levels,
                               plot.val    = plot.val,
+                              two.lines   = two.lines,
                               ...)
       }
       return()
@@ -501,7 +504,7 @@ utility.plothierarchy <-
       {
          x.l <- delta.x*w
          x.r <- (1-delta.x)*w
-         y   <- 0.8*h
+         y   <- min(str$y)
          num.col <- 100
          v <- (1:num.col - 0.5)/num.col
          colors <- utility.get.colors(v,col)
@@ -616,8 +619,36 @@ utility.plothierarchy <-
                   
          # write text into box:
             
-         text(str$x[i],str$y[i],rownames(str)[i],cex=cex.nodes,...)
-
+         label <- rownames(str)[i]
+         if ( two.lines == FALSE )
+         {
+           text(x=str$x[i],y=str$y[i],labels=label,cex=cex.nodes,...)
+         }
+         else
+         {
+           pos <- c(as.numeric(gregexpr(" ",label)[[1]]),as.numeric(gregexpr("-",label)[[1]]))
+           pos <- pos[pos>0]
+           if ( length(pos) == 0 )
+           {
+             text(x=str$x[i],y=str$y[i],labels=label,cex=cex.nodes,...)
+           } else {
+             nchar.split <- pos[which.min(abs(pos-0.5*nchar(label)))]
+             if ( nchar.split > 1 & nchar.split < nchar(label) )
+             {
+               label1 <- substr(label,1,nchar.split-1)
+               if ( substr(label,nchar.split,nchar.split) == "-" )
+               {
+                 label1 <- substr(label,1,nchar.split)
+               }
+               label2 <- substr(label,nchar.split+1,nchar(label))
+               text(x=str$x[i],y=str$y[i]+(0.5-delta.y)*h/3,labels=label1,cex=cex.nodes,...)
+               text(x=str$x[i],y=str$y[i]-(0.5-delta.y)*h/3,labels=label2,cex=cex.nodes,...)
+             } else {
+               text(x=str$x[i],y=str$y[i],labels=label,cex=cex.nodes,...)
+             }
+           }
+         }
+         
          # plot connecting lines:
                            
          upper <- str$upper[i]
@@ -901,6 +932,7 @@ utility.plot <- function(node,
                          levels      = NA,
                          plot.val    = TRUE,
                          print.val   = TRUE,
+                         two.lines   = FALSE,
                          ...)
 {
    if ( type[1] == "nodes" | type[1] == "node" )
@@ -1033,6 +1065,7 @@ utility.plot <- function(node,
                                   with.attrib = with.attrib,
                                   levels      = levels,
                                   plot.val    = plot.val,
+                                  two.lines   = two.lines,
                                   ...)
          }
          if ( ! is.na(nodes[1]) )

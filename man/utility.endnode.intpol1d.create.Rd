@@ -3,6 +3,7 @@
 \alias{utility.endnode.intpol1d.create}
 
 \title{Construct a single-attribute interpolation end node}
+
 \description{Function to construct a single-attribute interpolation end node.}
 
 \usage{

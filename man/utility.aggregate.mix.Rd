@@ -33,6 +33,16 @@ non-missing components will be rescaled to sum to unity.
 The function returns the aggregated value or utility.
 }
 
+\details{
+The aggregation function is a mixture of the functions 
+\code{\link{utility.aggregate.add}},
+\code{\link{utility.aggregate.min}}, and
+\code{\link{utility.aggregate.geo}}.
+The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case:\cr
+\if{html}{\figure{aggregationmix.png}{options: width=80\%}}
+\if{latex}{\figure{aggregationmix.pdf}{options: width=5in}}
+}
+
 \references{
 Short description of the package: \cr\cr
 Reichert, P., Schuwirth, N. and Langhans, S., 
@@ -49,20 +59,26 @@ Peter Reichert <peter.reichert@eawag.ch>
 \seealso{
 Constructor of aggregation node: \cr\cr
 \code{\link{utility.aggregation.create}} \cr\cr
-Alternative aggregation techniques: \cr\cr
-\code{\link{utility.aggregate.add}}, \cr
-\code{\link{utility.aggregate.min}}, \cr
-\code{\link{utility.aggregate.max}}, \cr
-\code{\link{utility.aggregate.cobbdouglas}}, \cr
-\code{\link{utility.aggregate.geo}}, \cr
-\code{\link{utility.aggregate.geooff}}, \cr
-\code{\link{utility.aggregate.revgeo}}, \cr
-\code{\link{utility.aggregate.revgeooff}}, \cr
-\code{\link{utility.aggregate.harmo}}, \cr
-\code{\link{utility.aggregate.harmooff}}, \cr
-\code{\link{utility.aggregate.revharmo}}, \cr
-\code{\link{utility.aggregate.revharmooff}}, \cr
-\code{\link{utility.aggregate.mult}}.
+Aggregation techniques provided by uncsim: \cr\cr
+\code{\link{utility.aggregate.add}} for additive aggregation (weighted arithmetic mean), \cr
+\code{\link{utility.aggregate.min}} for minimum aggregation, \cr
+\code{\link{utility.aggregate.max}} for maximum aggregation, \cr
+\code{\link{utility.aggregate.geo}} or \code{\link{utility.aggregate.cobbdouglas}} for geometric or Cobb-Douglas aggregation (weighted geometric mean), \cr
+\code{\link{utility.aggregate.geooff}} for geometric aggregation with offset, \cr
+\code{\link{utility.aggregate.revgeo}} for reverse geometric aggregation, \cr
+\code{\link{utility.aggregate.revgeooff}} for reverse geometric aggregation with offset, \cr
+\code{\link{utility.aggregate.harmo}} for harmonic aggregation (weighted harmonic mean), \cr
+\code{\link{utility.aggregate.harmooff}} for harmonic aggregation with offset, \cr
+\code{\link{utility.aggregate.revharmo}} for reverse harmonic aggregation, \cr
+\code{\link{utility.aggregate.revharmooff}} for reverse harmonic aggregation with offset, \cr
+\code{\link{utility.aggregate.mult}} for multiplicative aggregation, \cr
+\code{\link{utility.aggregate.mix}} for a mixture of additive, minimum, and geometric aggregation, \cr
+\code{\link{utility.aggregate.addmin}} for a mixture of additive and minimum aggregation. \cr
+\code{\link{utility.aggregate.addpower}} for additive power aggregation (weighted power mean), \cr
+\code{\link{utility.aggregate.revaddpower}} for reverse additive power aggregation, \cr
+\code{\link{utility.aggregate.addsplitpower}} for splitted additive power aggregation, \cr
+\code{\link{utility.aggregate.revaddsplitpower}} for reverse splitted additive power aggregation, \cr
+\code{\link{utility.aggregate.bonusmalus}} for an aggregation technique that considers some of the values or utilities of sub-objectives only as bonus or malus. \cr
 }
 
 \examples{

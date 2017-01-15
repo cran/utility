@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.3                                        Peter Reichert 05.10.2014 #
+# version 1.4                                        Peter Reichert 05.06.2016 #
 #                                                                              #
 ################################################################################
 
@@ -218,6 +218,7 @@ plot.utility.conversion.parfun <-
            levels      = NA,
            plot.val    = TRUE,
            print.val   = TRUE,
+           two.lines   = FALSE,
            ...)
 {
     node <- x
@@ -238,6 +239,7 @@ plot.utility.conversion.parfun <-
                  levels      = levels,
                  plot.val    = plot.val,
                  print.val   = print.val,
+                 two.lines   = two.lines,
                  ...)
   }
 

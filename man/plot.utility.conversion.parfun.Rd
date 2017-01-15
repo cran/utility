@@ -27,6 +27,7 @@ Plot node definition or underlying objectives hierarchy.
      levels      = NA,
      plot.val    = TRUE,
      print.val   = TRUE,
+     two.lines   = FALSE,
      ...)
 }
 
@@ -130,6 +131,9 @@ Otherwise, the medians and colored boxes indicating 90\% credibility or occurren
 }
   \item{print.val}{
 (optional) print value as a number when plotting a table of boxes.
+}
+  \item{two.lines}{
+(optional) choose whether two lines should be used for the labels in the hierarchy plot.
 }
   \item{\dots}{
 additional arguments passed to the R plotting routine.

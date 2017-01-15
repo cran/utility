@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.3                                        Peter Reichert 05.10.2014 #
+# version 1.4                                        Peter Reichert 28.01.2016 #
 #                                                                              #
 ################################################################################
 
@@ -89,7 +89,8 @@ utility.calc.colors <- function(n=5)
 
 utility.get.colors <- function(u,col=utility.calc.colors())
 {
-  col.ind <- 1 + floor(u*length(col)*0.99999)
+  col.ind <- 1 + floor(u * length(col) + 1e-15)
+  col.ind <- ifelse(col.ind>length(col),length(col),col.ind)
   cols <- col[col.ind]
   cols <- ifelse(is.na(col.ind),"white",cols)
   return(cols)

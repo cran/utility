@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab utility\cr
 Type: \tab Package\cr
-Version: \tab 1.3\cr
-Date: \tab 2014-10-14\cr
+Version: \tab 1.4\cr
+Date: \tab 2017-01-15\cr
 License: \tab GPL (>= 2)\cr
 }
 An objective hierarchy and an associated value or utility function 
@@ -39,17 +39,22 @@ attributes.
 End nodes of the class \code{utility.endnode.cond} implement
 value or utility functions that assign different value or utility
 functions to a finite set of attribute combinations.
-Finally, end nodes of the class \code{utility.endnode.firstavail} implement
+End nodes of the class \code{utility.endnode.firstavail} implement
 value or utility functions that try to evaluate a list of nodes and 
 return the value of the first node that could be evaluated based
 on the provided attribute data.
+Finally, end nodes of the class \code{utility.endnode.classcounts} implement
+value or utility functions that value counts e.g. of species of different classes
+by assigning a basic value for the occurrence of at least one species of the best class
+and incrementing this value by multiplicities of species of this class and of the next lower class.
 These end nodes can be implemented by using the following constructors. \cr\cr 
 \code{\link{utility.endnode.discrete.create}} \cr
 \code{\link{utility.endnode.intpol1d.create}} \cr
 \code{\link{utility.endnode.parfun1d.create}} \cr
 \code{\link{utility.endnode.intpol2d.create}} \cr
 \code{\link{utility.endnode.cond.create}} \cr
-\code{\link{utility.endnode.firstavail.create}} \cr\cr
+\code{\link{utility.endnode.firstavail.create}} \cr
+\code{\link{utility.endnode.classcounts.create}} \cr\cr
 To advance to higher hierarchical levels, values or utilities at lower
 levels must be aggregated to the next higher level.
 This is done ab aggregation nodes of the class \code{utility.aggregation}.
@@ -78,6 +83,8 @@ as the first argument: \cr\cr
 \code{\link{print.utility.endnode.parfun1d}} \cr
 \code{\link{print.utility.endnode.intpol2d}} \cr
 \code{\link{print.utility.endnode.cond}} \cr
+\code{\link{print.utility.endnode.firstavail}} \cr
+\code{\link{print.utility.endnode.classcounts}} \cr
 \code{\link{print.utility.aggregation}} \cr
 \code{\link{print.utility.conversion.intpol}} \cr
 \code{\link{print.utility.conversion.parfun}} \cr\cr
@@ -86,6 +93,8 @@ as the first argument: \cr\cr
 \code{\link{summary.utility.endnode.parfun1d}} \cr
 \code{\link{summary.utility.endnode.intpol2d}} \cr
 \code{\link{summary.utility.endnode.cond}} \cr
+\code{\link{summary.utility.endnode.firstavail}} \cr
+\code{\link{summary.utility.endnode.classcounts}} \cr
 \code{\link{summary.utility.aggregation}} \cr
 \code{\link{summary.utility.conversion.intpol}} \cr
 \code{\link{summary.utility.conversion.parfun}} \cr\cr
@@ -94,6 +103,8 @@ as the first argument: \cr\cr
 \code{\link{plot.utility.endnode.parfun1d}} \cr
 \code{\link{plot.utility.endnode.intpol2d}} \cr
 \code{\link{plot.utility.endnode.cond}} \cr
+\code{\link{plot.utility.endnode.firstavail}} \cr
+\code{\link{plot.utility.endnode.classcounts}} \cr
 \code{\link{plot.utility.aggregation}} \cr
 \code{\link{plot.utility.conversion.intpol}} \cr
 \code{\link{plot.utility.conversion.parfun}} \cr\cr
@@ -106,6 +117,8 @@ that again calls automatically the corresponding class-specific function \cr\cr
 \code{\link{evaluate.utility.endnode.parfun1d}} \cr
 \code{\link{evaluate.utility.endnode.intpol2d}} \cr
 \code{\link{evaluate.utility.endnode.cond}} \cr
+\code{\link{evaluate.utility.endnode.firstavail}} \cr
+\code{\link{evaluate.utility.endnode.classcounts}} \cr
 \code{\link{evaluate.utility.aggregation}} \cr
 \code{\link{evaluate.utility.conversion.intpol}} \cr
 \code{\link{evaluate.utility.conversion.parfun}} \cr\cr

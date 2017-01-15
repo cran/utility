@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.3                                        Peter Reichert 05.10.2014 #
+# version 1.4                                        Peter Reichert 10.01.2017 #
 #                                                                              #
 ################################################################################
 
@@ -325,7 +325,7 @@ utility.aggregate.revharmooff <- function(u,par)
 
 utility.aggregate.mix <- function(u,par)  # par[i]: weight of u[i]
 {                                         # par[n+j]: weight of technique j
-  # check input:                         # (j = add, min, geo)
+  # check input:                          # (j = add, min, geo)
   
   n <- length(u)
   if ( n+3 != length(par) )
@@ -366,5 +366,112 @@ utility.aggregate.addmin <- function(u,par)
   }
   return(   par[n+1]  * utility.aggregate.add(u,par[1:n]) +
               (1-par[n+1]) * utility.aggregate.min(u,NA))
+}
+
+
+utility.aggregate.addpower <- function(u,par)
+{
+  n <- length(u)
+  if ( length(par) != n+1 ) 
+  {
+    warning("Length of parameter vector not equal to number of utilities/values + 1:",
+            " par: ",length(par)," u: ", length(u))
+    return(NA)
+  }  
+  u.loc <- u^par[n+1]
+  return(utility.aggregate.add(u.loc,par[1:n])^(1/par[n+1]))
+}
+
+
+utility.aggregate.revaddpower <- function(u,par)
+{
+  n <- length(u)
+  if ( length(par) != n+1 ) 
+  {
+    warning("Length of parameter vector not equal to number of utilities/values + 1:",
+            " par: ",length(par)," u: ", length(u))
+    return(NA)
+  }  
+  u.loc <- (1-u)^par[n+1]
+  return(1-utility.aggregate.add(u.loc,par[1:n])^(1/par[n+1]))
+}
+
+
+utility.aggregate.addsplitpower <- function(u,par)
+{
+  g.trans     <- function(v,alpha,split) { return(ifelse(v<=split, split*(v/split)^alpha,     1-(1-split)*((1-v)/(1-split))^alpha))     }
+  g.trans.inv <- function(v,alpha,split) { return(ifelse(v<=split, split*(v/split)^(1/alpha), 1-(1-split)*((1-v)/(1-split))^(1/alpha))) }
+  
+  n <- length(u)
+  if ( length(par) != n+2 ) 
+  {
+    warning("Length of parameter vector not equal to number of utilities/values + 2:",
+            " par: ",length(par)," u: ", length(u))
+    return(NA)
+  }  
+  u.loc <- g.trans(u,par[n+1],par[n+2])
+  return(g.trans.inv(utility.aggregate.add(u.loc,par[1:n]),par[n+1],par[n+2]))
+}
+
+
+utility.aggregate.revaddsplitpower <- function(u,par)
+{
+  g.trans     <- function(v,alpha,split) { return(ifelse(v<=split, split*(v/split)^alpha,     1-(1-split)*((1-v)/(1-split))^alpha))     }
+  g.trans.inv <- function(v,alpha,split) { return(ifelse(v<=split, split*(v/split)^(1/alpha), 1-(1-split)*((1-v)/(1-split))^(1/alpha))) }
+  
+  n <- length(u)
+  if ( length(par) != n+2 ) 
+  {
+    warning("Length of parameter vector not equal to number of utilities/values + 2:",
+            " par: ",length(par)," u: ", length(u))
+    return(NA)
+  }  
+  u.loc <- g.trans(1-u,par[n+1],par[n+2])
+  return(1-g.trans.inv(utility.aggregate.add(u.loc,par[1:n]),par[n+1],par[n+2]))
+}
+
+
+utility.aggregate.bonusmalus <- function(u,par,def.agg="utility.aggregate.add")
+{
+  # assignments and checks:
+  n <- length(u)
+  par.bonusmalus <- par[length(par)-n+1:n]
+  ind.main  <- which(is.na(par.bonusmalus)); if ( length(ind.main) == 0 ) return(NA)
+  ind.bonus <- which(par.bonusmalus > 0)
+  ind.malus <- which(par.bonusmalus < 0)
+  
+  # evaluate main sub-objectives:
+  if ( length(ind.main) == 1 )
+  {
+    u.main <- u[ind.main]
+  }
+  else
+  {
+    u.main <- as.numeric(apply(as.matrix(u[ind.main],ncol=1),2,def.agg,par[1:(length(par)-n)]))
+  }
+  if ( is.na(u.main) ) return(NA)
+  
+  # check for active bonus:
+  ind.bonus.active <- numeric(0)
+  if ( length(ind.bonus) > 0 )
+  {
+    ind.bonus.active <- ind.bonus[u[ind.bonus] > u.main]
+    ind.bonus.active <- as.numeric(ind.bonus.active[!is.na(ind.bonus.active)]) # empty vector was logical(0) rather than numeric(0)
+  }
+  
+  # check for active malus:
+  ind.malus.active <- numeric(0)
+  if ( length(ind.malus) > 0 )
+  {
+    ind.malus.active <- ind.malus[u[ind.malus] < u.main]
+    ind.malus.active <- as.numeric(ind.malus.active[!is.na(ind.malus.active)]) # empty vector was logical(0) rather than numeric(0)
+  }
+  
+  if ( length(ind.bonus.active) + length(ind.malus.active) == 0 ) return(u.main)
+
+  u.agg <- utility.aggregate.add(c(u.main,u[c(ind.bonus.active,ind.malus.active)]),
+                                 c(1,abs(par.bonusmalus)[c(ind.bonus.active,ind.malus.active)]))
+  
+  return(u.agg)
 }
 

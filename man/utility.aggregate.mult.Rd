@@ -17,12 +17,24 @@ numeric vector of values or utilities to be aggregated.
   \item{par}{
 numeric vector of weights for calculating the multiplicative
 combination of the values provided in the argument \code{u}.
+Note that for this aggregation technique, the result depends on the sum of the weights that need not be unity.
 }
 }
 
 \value{
 numeric value corresponding to the multiplicative aggregation
 of the values provided in the vector \code{u}.
+}
+
+\details{
+To derive the aggregated value, we first solve the implicit equation
+\deqn{k + 1 = \prod_{i=1}^n (1 + k w_i)}{k + 1 = prod ( 1 + k wi )}
+for \eqn{k} and then calculate the aggregated value as
+\deqn{u = \frac{\displaystyle \prod_{i=1}^n (1 + k w_i u_i)}{k}}{u = (prod(1 + k ki  ui) - 1) / k}
+See Keeney and Raiffa, Decisions with multiple objectives, 1976, pp. 307, 347-348 for details.\cr
+The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case:\cr
+\if{html}{\figure{aggregationmult.png}{options: width=80\%}}
+\if{latex}{\figure{aggregationmult.pdf}{options: width=5in}}
 }
 
 \references{
@@ -45,21 +57,26 @@ Peter Reichert <peter.reichert@eawag.ch>
 \seealso{
 Constructor of aggregation node: \cr\cr
 \code{\link{utility.aggregation.create}} \cr\cr
-Alternative aggregation techniques: \cr\cr
-\code{\link{utility.aggregate.add}}, \cr
-\code{\link{utility.aggregate.min}}, \cr
-\code{\link{utility.aggregate.max}}, \cr
-\code{\link{utility.aggregate.cobbdouglas}}, \cr
-\code{\link{utility.aggregate.geo}}, \cr
-\code{\link{utility.aggregate.geooff}}, \cr
-\code{\link{utility.aggregate.revgeo}}, \cr
-\code{\link{utility.aggregate.revgeooff}}, \cr
-\code{\link{utility.aggregate.harmo}}, \cr
-\code{\link{utility.aggregate.harmooff}}, \cr
-\code{\link{utility.aggregate.revharmo}}, \cr
-\code{\link{utility.aggregate.revharmooff}}, \cr
-\code{\link{utility.aggregate.mix}}, \cr
-\code{\link{utility.aggregate.addmin}}.
+Aggregation techniques provided by uncsim: \cr\cr
+\code{\link{utility.aggregate.add}} for additive aggregation (weighted arithmetic mean), \cr
+\code{\link{utility.aggregate.min}} for minimum aggregation, \cr
+\code{\link{utility.aggregate.max}} for maximum aggregation, \cr
+\code{\link{utility.aggregate.geo}} or \code{\link{utility.aggregate.cobbdouglas}} for geometric or Cobb-Douglas aggregation (weighted geometric mean), \cr
+\code{\link{utility.aggregate.geooff}} for geometric aggregation with offset, \cr
+\code{\link{utility.aggregate.revgeo}} for reverse geometric aggregation, \cr
+\code{\link{utility.aggregate.revgeooff}} for reverse geometric aggregation with offset, \cr
+\code{\link{utility.aggregate.harmo}} for harmonic aggregation (weighted harmonic mean), \cr
+\code{\link{utility.aggregate.harmooff}} for harmonic aggregation with offset, \cr
+\code{\link{utility.aggregate.revharmo}} for reverse harmonic aggregation, \cr
+\code{\link{utility.aggregate.revharmooff}} for reverse harmonic aggregation with offset, \cr
+\code{\link{utility.aggregate.mult}} for multiplicative aggregation, \cr
+\code{\link{utility.aggregate.mix}} for a mixture of additive, minimum, and geometric aggregation, \cr
+\code{\link{utility.aggregate.addmin}} for a mixture of additive and minimum aggregation. \cr
+\code{\link{utility.aggregate.addpower}} for additive power aggregation (weighted power mean), \cr
+\code{\link{utility.aggregate.revaddpower}} for reverse additive power aggregation, \cr
+\code{\link{utility.aggregate.addsplitpower}} for splitted additive power aggregation, \cr
+\code{\link{utility.aggregate.revaddsplitpower}} for reverse splitted additive power aggregation, \cr
+\code{\link{utility.aggregate.bonusmalus}} for an aggregation technique that considers some of the values or utilities of sub-objectives only as bonus or malus. \cr
 }
 
 \examples{
