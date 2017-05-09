@@ -1,0 +1,123 @@
+=======================================
+Modification history of utility package
+=======================================
+
+
+Changes version 1.4 (15.01.2017) -> version 1.4.1 (09.05.2017)
+==============================================================
+
+PR: Error corrected with plotting aggregation functions that use the argument "add.arg.fun"
+    ("evaluate" correctly used the argument already in version 1.4)
+
+
+Changes version 1.3 (14.10.2014) -> version 1.4 (15.01.2017)
+============================================================
+
+PR: New aggregation technique "bonusmalus" added
+
+PR: Documentation of aggregation functions complemented with equations and plots
+
+PR: New aggregation techniques "addpower", "revaddpower", "addsplitpower", "revaddsplitpower"
+    added
+    
+PR: Width of colored axes in 2d aggregation countour plot increased
+
+PR: Position of legend in hierarchy plot improved (level of lowest box)
+
+PR: Colors of boundary values modified to get color corresponding to higher values
+
+PR: New option "two.lines"" for plotting hierarchies with spreading the labels in the boxes
+    across two lines
+
+PR: New end node type "classcounts" implemented
+
+
+Changes version 1.2 (15.01.2014) -> version 1.3 (14.10.2014)
+============================================================
+
+PR: New end node type "firstavail" implemented
+
+PR: Error corrected: argument "with.attrib=FALSE" was ignored in hierarchical 
+    plot when nodes were specified
+
+PR: Error in hierarchical view with multiple u and a single uref corrected.
+
+PR: New aggregation function provided:
+      "utility.aggregate.addmin"
+
+PR: Missing offset parameter added to example in help file for the functions
+    utility.aggregate.geooff, utility.aggregate.revgeooff, 
+    utility.aggregate.harmooff, utility.aggregate.revharmooff, 
+
+PR: Change attribute type to numeric for endnodes intpol1d, intpol2d and 
+    parfun1d
+
+PR: Bounding boxes corrected for tabular plot
+
+PR: Comment added to example regarding values out of range due to normal
+    distribution of uncertainty.
+
+PR: Line ends improved for color legend in hierarchy plot.
+
+PR: Additional argument "print.val" added to the plot functions for tables
+    and hierarchies to select whether the numerical values should be written 
+    into the boxes in the tabular view.
+
+
+Changes version 1.1 (03.03.2013) -> version 1.2 (15.01.2014)
+============================================================
+
+PR: Citation file added and reference updated.
+
+PR: Plot of aggregation nodes as isolines if only two nodes are aggregated
+
+PR: Colored bars along axes of value functions improved according to plots
+    of 2d aggregation nodes (see point above)
+
+PR: Function "utility.structure":
+    Missing consideration of shift.levels for end nodes corrected.
+    Function "utility.structure" is now exported.
+
+PR: The functions 
+      "updatepar.utility.conversion.intpol" and 
+      "updatepar.utility.conversion.parfun"
+    are corrected to update parameters of underlying nodes.
+
+PR: New aggregation functions provided:
+      "utility.aggregate.geo"
+      "utility.aggregate.geooff"
+      "utility.aggregate.revgeo"
+      "utility.aggregate.revgeooff"
+      "utility.aggregate.harmo"
+      "utility.aggregate.harmooff"
+      "utility.aggregate.revharmo"
+      "utility.aggregate.revharmooff"
+
+PR: New argument "levels" in plot functions to indicate which hierarchical
+    levels should be plotted in hierarchical and tabular plots.
+
+PR: New argument "plot.val" in plot functions to indicate whether a vertical 
+    line indicating the value should be plotted in the boxes of hierarchical 
+    and tabular plots.
+
+PR: New option to provide u as a list in plot functions with option type =
+    "table" or type = "hierarchy" to plot multiple rows or hierarchies with 
+    uncertainty ranges.
+
+PR: Argument "uref" is now also supported for type="table".
+
+PR: Output of class constructors on successful termination suppressed.
+
+
+Changes version 1.0 (22.09.2012) -> version 1.1 (03.03.2013)
+============================================================
+
+PR: Functions "updatepar" and "utility.get.colors" are now exported.
+
+PR: Global variable "utility.num.colors" eliminated.
+
+PR: Documentation of plotting hierarchies complemented by the comment that
+    only value nodes are colored.
+
+
+

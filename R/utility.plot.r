@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.4                                        Peter Reichert 05.06.2016 #
+# version 1.4.1                                      Peter Reichert 08.05.2017 #
 #                                                                              #
 ################################################################################
 
@@ -170,8 +170,15 @@ utility.aggregation.plot <- function(node           = node,
     array.x <- sort(rep(x,num.grid))
     array.y <- rep(y,num.grid)
     array.xy <- cbind(array.x,array.y)
-    
-    v <- apply(array.xy,1,node$name.fun,node$par)
+
+    if ( length(node$add.arg.fun) > 0 )
+    {
+      v <- apply(array.xy,1,node$name.fun,node$par,node$add.arg.fun)
+    }
+    else
+    {
+      v <- apply(array.xy,1,node$name.fun,node$par)
+    }
     v <- t(matrix(v,ncol=num.grid,byrow=FALSE))
     
     if ( node$utility )
