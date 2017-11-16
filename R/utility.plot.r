@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.4.1                                      Peter Reichert 08.05.2017 #
+# version 1.4.2                                      Peter Reichert 08.05.2017 #
 #                                                                              #
 ################################################################################
 
@@ -494,10 +494,10 @@ utility.plothierarchy <-
    {
       # set-up plot frame:
          
-      par.def <- par(no.readonly=TRUE)
-      par(mar=c(0,0,0,0))
-      plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),
-           xaxt="n",yaxt="n",xlab="",ylab="",cex.main=cex.main)
+      #par.def <- par(no.readonly=TRUE)
+      #par(mar=c(0,0,0,0))
+      plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),type="n",
+           axes=FALSE,xlab="",ylab="",cex.main=cex.main)
            
       # write title
       
@@ -687,7 +687,7 @@ utility.plothierarchy <-
             }
          }
       } # end for i
-      par(par.def)
+      #par(par.def)
    } # end for k
 }
 
@@ -800,10 +800,10 @@ utility.plottable <-
       y  <- (1-delta.main)*y
       dy <- (1-delta.main)*dy
    }
-   par.def <- par(no.readonly=TRUE)
-   par(mar=c(0,0,0,0))
-   plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),
-        xaxt="n",yaxt="n",xlab="",ylab="")
+   #par.def <- par(no.readonly=TRUE)
+   #par(mar=c(0,0,0,0))
+   plot(numeric(0),numeric(0),xlim=c(0,1),ylim=c(0,1),type="n",
+        axes=FALSE,xlab="",ylab="")
    
    # write and color values:
    
@@ -918,7 +918,7 @@ utility.plottable <-
    
    # reset plotting parameters:
    
-   par(par.def)
+   #par(par.def)
 }
 
 
@@ -1093,8 +1093,9 @@ utility.plot <- function(node,
                                cex.nodes   = cex.nodes,
                                cex.attrib  = cex.attrib,
                                with.attrib = with.attrib,
+                               two.lines   = two.lines,
                                ...)
-               } 
+                } 
             }
          }
       }

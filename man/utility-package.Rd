@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab utility\cr
 Type: \tab Package\cr
-Version: \tab 1.4.1\cr
-Date: \tab 2017-05-09\cr
+Version: \tab 1.4.2\cr
+Date: \tab 2017-11-16\cr
 License: \tab GPL (>= 2)\cr
 }
 An objective hierarchy and an associated value or utility function 

@@ -3,6 +3,16 @@ Modification history of utility package
 =======================================
 
 
+Changes version 1.4.1 (09.05.2017) -> version 1.4.2 (15.11.2017)
+================================================================
+
+PR: Error corrected with plotting hierarchies: the argument "two.lines" was ignored if the
+    hierarchy was plotted from a node other than the top node
+    
+PR: Format of hierarchy and table plots adjusted by not setting margins to zero internally.
+    This leaves the user the freedom of chosing his or her own margins
+
+
 Changes version 1.4 (15.01.2017) -> version 1.4.1 (09.05.2017)
 ==============================================================
 
