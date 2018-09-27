@@ -35,7 +35,7 @@ utility.endnode.cond.create <- function(name.node,          # character(1)
   }
   if ( length(names(attrib.levels)) != length(unique(names(attrib.levels))) )
   {
-    cat("*** Warning: cColumn names of attrib.levels must be different","\n")
+    cat("*** Warning: Column names of attrib.levels must be different","\n")
     check.ok <- F
   }
   if ( nrow(attrib.levels) != length(nodes) )
@@ -131,6 +131,8 @@ evaluate.utility.endnode.cond <- function(x,
                                           par=NA,
                                           ...)
 {
+  as.character.na <- function(x,...) { return(ifelse(is.na(x),"",as.character(x,...))) }
+    
   node <- x
   
   # check availability of attributes:
@@ -157,10 +159,10 @@ evaluate.utility.endnode.cond <- function(x,
   
   u    <- rep(NA,nrow(attrib))
   calc <- rep(FALSE,nrow(attrib))
-  for ( i in 1:ncol(n$attrib.levels) )  # evaluate NAs
-  {
-    calc <- calc | is.na(attrib[,names(n$attrib.levels)[i]])
-  }
+  # for ( i in 1:ncol(n$attrib.levels) )  # evaluate NAs # comment to allow for NAs
+  # {
+  #   calc <- calc | is.na(attrib[,names(n$attrib.levels)[i]])
+  # }
   while( TRUE )
   {
     # identify first row that has not yet been evaluated:
@@ -173,32 +175,32 @@ evaluate.utility.endnode.cond <- function(x,
     
     # find rows with the same attribute combinations:
     
-    ind.attrib <- as.character(attrib[startind,names(n$attrib.levels)[1]]) == 
-      as.character(attrib[,names(n$attrib.levels)[1]])
+    ind.attrib <- as.character.na(attrib[startind,names(n$attrib.levels)[1]]) == 
+      as.character.na(attrib[,names(n$attrib.levels)[1]])
     if ( ncol(n$attrib.levels) > 1 )
     {
       for ( i in 2:ncol(n$attrib.levels) )
       {
         ind.attrib <- 
           ind.attrib & 
-          ( as.character(attrib[startind,names(n$attrib.levels)[i]]) == 
-              as.character(attrib[,names(n$attrib.levels)[i]]) )
+          ( as.character.na(attrib[startind,names(n$attrib.levels)[i]]) == 
+              as.character.na(attrib[,names(n$attrib.levels)[i]]) )
       }
     }
     ind.attrib <- which(ind.attrib)
     
     # find corresponding node:
     
-    ind.node <- as.character(attrib[startind,names(n$attrib.levels)[1]]) ==
-      as.character(n$attrib.levels[,names(n$attrib.levels)[1]])
+    ind.node <- as.character.na(attrib[startind,names(n$attrib.levels)[1]]) ==
+      as.character.na(n$attrib.levels[,names(n$attrib.levels)[1]])
     if ( ncol(n$attrib.levels) > 1 )
     {
       for ( i in 2:ncol(n$attrib.levels) )
       {
         ind.node <- 
           ind.node & 
-          ( as.character(n$attrib.levels[,names(n$attrib.levels)[i]]) == 
-              as.character(attrib[startind,names(n$attrib.levels)[i]]) )
+          ( as.character.na(n$attrib.levels[,names(n$attrib.levels)[i]]) == 
+              as.character.na(attrib[startind,names(n$attrib.levels)[i]]) )
       }
     }
     ind.node <- which(ind.node)

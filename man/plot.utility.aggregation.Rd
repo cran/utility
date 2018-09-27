@@ -26,6 +26,8 @@ Plot node definition or underlying objective hierarchy.
      with.attrib = TRUE,
      levels      = NA,
      plot.val    = TRUE,
+     col.val     = "black",
+     lwd.val     = 1,
      print.val   = TRUE,
      two.lines   = FALSE,
      ...)
@@ -128,6 +130,12 @@ Otherwise, the medians and colored boxes indicating 90\% credibility or occurren
 }
   \item{plot.val}{
 (optional) plot value as a vertical line within the box.
+}
+  \item{col.val}{
+(optional) color of the vertical line indicating the value within the box (default black).
+}
+  \item{lwd.val}{
+(optional) line width of the vertical line indicating the value within the box (default 1).
 }
   \item{print.val}{
 (optional) print value as a number when plotting a table of boxes.

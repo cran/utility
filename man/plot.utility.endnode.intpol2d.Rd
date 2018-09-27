@@ -15,6 +15,8 @@ Plot node definition.
      gridlines = c(0.2, 0.4, 0.6, 0.8), 
      main      = "", 
      cex.main  = 1,
+     xlim      = numeric(0),
+     ylim      = numeric(0),
      ...)
 }
 
@@ -42,6 +44,12 @@ Not used for this type of node.
 }
   \item{cex.main}{
 (optional) scaling factor for title of the plot.
+}
+  \item{xlim}{
+(optional) limits of the x-axis of the plot (defaults to range).
+}
+  \item{ylim}{
+(optional) limits of the y-axis of the plot (defaults to range).
 }
   \item{\dots}{
 additional arguments passed to the R plotting routine.

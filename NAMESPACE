@@ -34,6 +34,7 @@ export("utility.fun.exp")
 
 export("utility.calc.colors")
 export("utility.get.colors")
+export("utility.get.attrib.names")
 
 export("utility.structure")
 

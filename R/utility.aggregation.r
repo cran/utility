@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.4                                        Peter Reichert 07.01.2017 #
+# version 1.4.3                                      Peter Reichert 20.09.2018 #
 #                                                                              #
 ################################################################################
 
@@ -301,6 +301,8 @@ plot.utility.aggregation <-
            with.attrib = TRUE,
            levels      = NA,
            plot.val    = TRUE,
+           col.val     = "black",
+           lwd.val     = 1,
            print.val   = TRUE,
            two.lines   = FALSE,
            ...)
@@ -323,6 +325,8 @@ plot.utility.aggregation <-
                  with.attrib = with.attrib,
                  levels      = levels,
                  plot.val    = plot.val,
+                 col.val     = col.val,
+                 lwd.val     = lwd.val,
                  print.val   = print.val,
                  two.lines   = two.lines,
                  ...)

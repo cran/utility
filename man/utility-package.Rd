@@ -14,9 +14,9 @@
 \tabular{ll}{
 Package: \tab utility\cr
 Type: \tab Package\cr
-Version: \tab 1.4.2\cr
-Date: \tab 2017-11-16\cr
-License: \tab GPL (>= 2)\cr
+Version: \tab 1.4.3\cr
+Date: \tab 2018-09-27\cr
+License: \tab GPL-3\cr
 }
 An objective hierarchy and an associated value or utility function 
 is constructed by constructing the nodes of the hierarchy starting 

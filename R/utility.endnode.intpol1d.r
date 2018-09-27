@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.3                                        Peter Reichert 05.10.2014 #
+# version 1.4.3                                      Peter Reichert 15.01.2018 #
 #                                                                              #
 ################################################################################
 
@@ -211,7 +211,7 @@ evaluate.utility.endnode.intpol1d <- function(x,
     else                a <- as.numeric(a)
   }
   
-  u <- approx(x=n$x,y=n$u,xout=a)$y
+  u <- approx(x=n$x,y=n$u,xout=a,rule=2)$y
   ind.out.of.range <- (a < n$range[1]) | (a > n$range[2])
   u <- ifelse(ind.out.of.range,NA,u)
   if ( sum(ind.out.of.range,na.rm=T) > 0 )
@@ -268,15 +268,18 @@ plot.utility.endnode.intpol1d <-
            gridlines = c(0.2,0.4,0.6,0.8),
            main      = "",
            cex.main  = 1,
+           xlim      = numeric(0),
            ...)
   {
     node <- x
     n <- updatepar(node,par)
+    if ( length(xlim) < 2 ) xlim <- c(min(n$x),max(n$x))
     utility.endnode.plot1d(node      = n,
                            col       = col,
                            gridlines = gridlines,
                            main      = main,
                            cex.main  = cex.main,
+                           xlim      = xlim,
                            ...)
     points(n$x,n$u,cex=1.5,xpd=TRUE) 
   }

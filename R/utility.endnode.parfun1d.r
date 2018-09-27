@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.3                                        Peter Reichert 05.10.2014 #
+# version 1.4.3                                      Peter Reichert 15.01.2018 #
 #                                                                              #
 ################################################################################
 
@@ -234,6 +234,7 @@ plot.utility.endnode.parfun1d <-
            gridlines = c(0.2,0.4,0.6,0.8),
            main      = "",
            cex.main  = 1,
+           xlim      = numeric(0),
            ...)
   {
     node <- x
@@ -243,6 +244,7 @@ plot.utility.endnode.parfun1d <-
                            gridlines = gridlines,
                            main      = main,
                            cex.main  = cex.main,
+                           xlim      = xlim,
                            ...)
   }
 

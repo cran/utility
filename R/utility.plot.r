@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.4.2                                      Peter Reichert 08.05.2017 #
+# version 1.4.3                                      Peter Reichert 20.09.2018 #
 #                                                                              #
 ################################################################################
 
@@ -19,15 +19,17 @@ utility.endnode.plot1d <-
                             gridlines = c(0.2,0.4,0.6,0.8),
                             main      = "",
                             cex.main  = 1,
+                            xlim      = numeric(0),
                             ...)
 {
    length <- 101
-   x <- seq(node$range[1],node$range[2],length=length)
+   if ( length(xlim) < 2 ) xlim <- node$range
+   x <- seq(xlim[1],xlim[2],length=length)
    u <- evaluate(node,attrib=x)
    title <- main; if ( nchar(title) == 0 ) title <- node$name
    funtype <- "utility"; if ( !node$utility ) funtype <- "value"
    plot(numeric(0),numeric(0),type="l",
-        xlim=node$range,ylim=c(0,1),
+        xlim=xlim,ylim=c(0,1),
         xlab=node$attrib,ylab=funtype,main=title,
         xaxs="i",yaxs="i",xaxt="n",yaxt="n",cex.main=cex.main,...)
 
@@ -43,9 +45,9 @@ utility.endnode.plot1d <-
       cols <- utility.get.colors(midpoints,col)
       for ( i in 1:(num.grid-1) )
       {
-         lines((node$range[1]-0.01*(node$range[2]-node$range[1]))*c(1,1),
+         lines((xlim[1]-0.01*(xlim[2]-xlim[1]))*c(1,1),
                endpoints[c(i,i+1)],
-               col=cols[i],lwd=3,lend=2,xpd=TRUE)
+               col=cols[i],lwd=3,lend=1,xpd=TRUE)
       }
      
       # x-axis:
@@ -55,7 +57,7 @@ utility.endnode.plot1d <-
       {
          lines(c(x[i],x[i+1]),
                -0.01*c(1,1),
-               col=cols[i],lwd=3,lend=2,xpd=TRUE)
+               col=cols[i],lwd=3,lend=1,xpd=TRUE)
       }
    }
    
@@ -102,13 +104,15 @@ utility.endnode.plot2d <- function(node,
                                    gridlines = c(0.2,0.4,0.6,0.8),
                                    main      = "",
                                    cex.main  = 1,
+                                   xlim      = numeric(0),
+                                   ylim      = numeric(0),
                                    ...)
 {
    num.grid <- 100
-   x <- node$ranges[[1]][1] + 
-        ((1:num.grid)-0.5)/num.grid*(node$ranges[[1]][2]-node$ranges[[1]][1])
-   y <- node$ranges[[2]][1] + 
-        ((1:num.grid)-0.5)/num.grid*(node$ranges[[2]][2]-node$ranges[[2]][1])
+   if ( length(xlim) < 2 ) xlim <- node$ranges[[1]]
+   if ( length(ylim) < 2 ) ylim <- node$ranges[[2]]
+   x <- xlim[1] + ((1:num.grid)-0.5)/num.grid*(xlim[2]-xlim[1])
+   y <- ylim[1] + ((1:num.grid)-0.5)/num.grid*(ylim[2]-ylim[1])
    
    array.x <- sort(rep(x,num.grid))
    array.y <- rep(y,num.grid)
@@ -119,7 +123,7 @@ utility.endnode.plot2d <- function(node,
    u <- t(matrix(u,ncol=num.grid,byrow=FALSE))
    
    title <- main; if ( nchar(title) == 0 ) title <- node$name
-   image(x=x,y=y,z=u,xlim=node$ranges[[1]],ylim=node$ranges[[2]],zlim=c(0,1),
+   image(x=x,y=y,z=u,xlim=xlim,ylim=ylim,zlim=c(0,1),
          col=col,xlab=node$attrib[1],ylab=node$attrib[2],main=title,
          cex.main=cex.main)
 }
@@ -204,8 +208,8 @@ utility.aggregation.plot <- function(node           = node,
       cols <- utility.get.colors(midpoints,col)
       for ( i in 1:(10*num.grid-1) )
       {
-        lines(-0.015*c(1,1),endpoints[c(i,i+1)],col=cols[i],lwd=6,lend=2,xpd=TRUE)
-        lines(endpoints[c(i,i+1)],-0.015*c(1,1),col=cols[i],lwd=6,lend=2,xpd=TRUE)
+        lines(-0.015*c(1,1),endpoints[c(i,i+1)],col=cols[i],lwd=6,lend=1,xpd=TRUE)
+        lines(endpoints[c(i,i+1)],-0.015*c(1,1),col=cols[i],lwd=6,lend=1,xpd=TRUE)
       }
       
       # axes (should overly colored bar):
@@ -300,13 +304,13 @@ utility.aggregation.plot <- function(node           = node,
 }
 
 
-utility.plotcolbox <- function(x,y,col,val=NA,plot.val=FALSE)
+utility.plotcolbox <- function(x,y,col,val=NA,plot.val=FALSE,col.val="black",lwd.val=1)
 {
   # check for availability of data:
   
   if ( length(val) == 0 ) return()
   if ( is.na(val[1]) & length(col)>1 ) return()
-  
+
   # plot colored box (without border):
   
   color <- col
@@ -320,7 +324,7 @@ utility.plotcolbox <- function(x,y,col,val=NA,plot.val=FALSE)
   
   if ( plot.val & !is.na(val[1]) )
   {
-    lines((x[1]+val[1]*(x[2]-x[1]))*c(1,1),y,lwd=1.0)
+    lines((x[1]+val[1]*(x[2]-x[1]))*c(1,1),y,lwd=lwd.val,col=col.val,lend=1)
   }
 }
 
@@ -372,6 +376,8 @@ utility.plothierarchy <-
             with.attrib = TRUE,
             levels      = NA,
             plot.val    = TRUE,
+            col.val     = "black",
+            lwd.val     = 1,
             two.lines   = FALSE,
             ...)
 {
@@ -396,6 +402,8 @@ utility.plothierarchy <-
                                      with.attrib = with.attrib,
                                      levels      = levels,
                                      plot.val    = plot.val,
+                                     col.val     = col.val,
+                                     lwd.val     = lwd.val,
                                      two.lines   = two.lines,
                                      ...)
             }
@@ -418,6 +426,8 @@ utility.plothierarchy <-
                               with.attrib = with.attrib,
                               levels      = levels,
                               plot.val    = plot.val,
+                              col.val     = col.val,
+                              lwd.val     = lwd.val,
                               two.lines   = two.lines,
                               ...)
       }
@@ -517,7 +527,7 @@ utility.plothierarchy <-
          colors <- utility.get.colors(v,col)
          for ( i in 1:num.col ) 
          {
-            lines(x.l+(x.r-x.l)/num.col*c(i-1,i),c(y,y),col=colors[i],lwd=3,lend=2)
+            lines(x.l+(x.r-x.l)/num.col*c(i-1,i),c(y,y),col=colors[i],lwd=3,lend=1)
          }
          text(x.l,y,"0",pos=1,cex=cex.nodes)
          text(x.r,y,"1",pos=1,cex=cex.nodes)
@@ -553,13 +563,13 @@ utility.plothierarchy <-
                if ( str$utility[i] ) color <- "white"
                if ( !uref.available )
                {
-                 utility.plotcolbox(x,y,color,val,plot.val)
+                 utility.plotcolbox(x,y,color,val,plot.val,col.val,lwd.val)
                }
                else
                {
                  valref <- uref.local[ind.uref.local[k],rownames(str)[i]]
-                 utility.plotcolbox(x,y1,color,valref,plot.val)
-                 utility.plotcolbox(x,y2,color,val,plot.val)                 
+                 utility.plotcolbox(x,y1,color,valref,plot.val,col.val,lwd.val)
+                 utility.plotcolbox(x,y2,color,val,plot.val,col.val,lwd.val)                 
                }
             }
             else # plot quantile summary of v or expected u
@@ -705,6 +715,8 @@ utility.plottable <-
             f.nodes    = 0.2,
             levels     = NA,
             plot.val   = FALSE,
+            col.val    = "black",
+            lwd.val    = 1,
             print.val  = TRUE,
             ...)
 {
@@ -826,7 +838,7 @@ utility.plottable <-
              {
                if ( str[nodes[j],"utility"] ) color <- "white"
              }
-             utility.plotcolbox(xbox,yb,color,val=val,plot.val=plot.val)
+             utility.plotcolbox(xbox,yb,color,val=val,plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
              if ( !is.na(val) & print.val )
              {
                val.str <- paste(round(val,2))
@@ -850,7 +862,7 @@ utility.plottable <-
                {
                  if ( str[nodes[j],"utility"] ) color <- "white"
                }
-               utility.plotcolbox(xbox,yb,color,val=val,plot.val=plot.val)
+               utility.plotcolbox(xbox,yb,color,val=val,plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
                if ( !is.na(val) & print.val )
                {
                  val.str <- paste(round(val,2))
@@ -938,6 +950,8 @@ utility.plot <- function(node,
                          with.attrib = TRUE,
                          levels      = NA,
                          plot.val    = TRUE,
+                         col.val     = "black",
+                         lwd.val     = 1,
                          print.val   = TRUE,
                          two.lines   = FALSE,
                          ...)
@@ -1072,6 +1086,8 @@ utility.plot <- function(node,
                                   with.attrib = with.attrib,
                                   levels      = levels,
                                   plot.val    = plot.val,
+                                  col.val     = col.val,
+                                  lwd.val     = lwd.val,
                                   two.lines   = two.lines,
                                   ...)
          }
@@ -1115,6 +1131,8 @@ utility.plot <- function(node,
                              f.nodes    = f.nodes,
                              levels     = levels,
                              plot.val   = plot.val,
+                             col.val    = col.val,
+                             lwd.val    = lwd.val,
                              print.val  = print.val,
                              ...)
          }

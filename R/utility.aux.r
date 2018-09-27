@@ -578,5 +578,21 @@ utility.prune <- function(str,level=NA)
 }
 
 
+utility.get.attrib.names <- function(node)
+{
+  if ( substring(class(node),1,7) != "utility" )
+  {
+    warning("Node \"",node$name,"\": argument must be a subclass of utility")
+    return(NA)
+  }
+  attrib <- character(0)
+  if ( node$type == "endnode" )  return(node$attrib)
+  if ( length(node$nodes) == 0 ) return(attrib)
+  for ( i in 1:length(node$nodes) ) 
+  {
+    attrib <- c(attrib,utility.get.attrib.names(node$nodes[[i]]))
+  }
+  return(unique(attrib))
+}
 
 

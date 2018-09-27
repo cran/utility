@@ -3,20 +3,39 @@ Modification history of utility package
 =======================================
 
 
+Changes version 1.4.2 (15.11.2017) -> version 1.4.3 (27.09.2018)
+================================================================
+
+PR: allow for NAs and set them equal to "" for attributes in endnode.cond
+
+PR: new plot arguments "col.val" and "lwd.val" for formatting the value lines
+    in hierarchy and table boxes
+
+PR: constant extrapolation added to intpol1d node; plot bounded to data 
+    range
+    xlim added to plot.utility.endnode.intpol1d and 
+    plot.utility.endnode.parfun1d
+    xlim and ylim added to plot.utility.endnode.intpol2d
+
+PR: New function implemented: "utility.get.attrib.names"
+
+
 Changes version 1.4.1 (09.05.2017) -> version 1.4.2 (15.11.2017)
 ================================================================
 
-PR: Error corrected with plotting hierarchies: the argument "two.lines" was ignored if the
-    hierarchy was plotted from a node other than the top node
+PR: Error corrected with plotting hierarchies: the argument "two.lines" was 
+    ignored if the hierarchy was plotted from a node other than the top node
     
-PR: Format of hierarchy and table plots adjusted by not setting margins to zero internally.
+PR: Format of hierarchy and table plots adjusted by not setting margins to 
+    zero internally.
     This leaves the user the freedom of chosing his or her own margins
 
 
 Changes version 1.4 (15.01.2017) -> version 1.4.1 (09.05.2017)
 ==============================================================
 
-PR: Error corrected with plotting aggregation functions that use the argument "add.arg.fun"
+PR: Error corrected with plotting aggregation functions that use the 
+    argument "add.arg.fun"
     ("evaluate" correctly used the argument already in version 1.4)
 
 
@@ -25,19 +44,21 @@ Changes version 1.3 (14.10.2014) -> version 1.4 (15.01.2017)
 
 PR: New aggregation technique "bonusmalus" added
 
-PR: Documentation of aggregation functions complemented with equations and plots
+PR: Documentation of aggregation functions complemented with equations and 
+    plots
 
-PR: New aggregation techniques "addpower", "revaddpower", "addsplitpower", "revaddsplitpower"
-    added
+PR: New aggregation techniques "addpower", "revaddpower", "addsplitpower", 
+    "revaddsplitpower" added
     
 PR: Width of colored axes in 2d aggregation countour plot increased
 
 PR: Position of legend in hierarchy plot improved (level of lowest box)
 
-PR: Colors of boundary values modified to get color corresponding to higher values
+PR: Colors of boundary values modified to get color corresponding to higher 
+    values
 
-PR: New option "two.lines"" for plotting hierarchies with spreading the labels in the boxes
-    across two lines
+PR: New option "two.lines"" for plotting hierarchies with spreading the 
+    labels in the boxes across two lines
 
 PR: New end node type "classcounts" implemented
 
