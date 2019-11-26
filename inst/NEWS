@@ -3,6 +3,16 @@ Modification history of utility package
 =======================================
 
 
+Changes version 1.4.3 (27.09.2018) -> version 1.4.4 (26.11.2019)
+================================================================
+
+PR: apply hierarchy plot attributes for the value line also to the median
+
+PR: passing plot arguments to axis commands enabled, e.g. yaxp
+
+PR:  manual page of utility.aggregate.geooff corrected
+
+
 Changes version 1.4.2 (15.11.2017) -> version 1.4.3 (27.09.2018)
 ================================================================
 

@@ -33,7 +33,7 @@ The function returns the aggregated value or utility.
 
 \details{
 The aggregation function is defined by
-\deqn{u = 1 - \prod_{i=1}^n (1-u_i+\delta)^{w_i} + \delta}{u = 1 - prod (1-ui-delta)^wi + delta}
+\deqn{u = 1 - \prod_{i=1}^n (1-u_i+\delta)^{w_i} + \delta}{u = 1 - prod (1-ui+delta)^wi + delta}
 where \eqn{\delta}{delta} is the last parameter appended to the weights.\cr
 The following figure shows examples of the behaviour of this aggregation function and its special case \code{\link{utility.aggregate.revgeo}} for the two-dimensional case:\cr
 \if{html}{\figure{aggregationrevgeo.png}{options: width=80\%}}

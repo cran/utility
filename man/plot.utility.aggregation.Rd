@@ -129,13 +129,13 @@ Otherwise, the medians and colored boxes indicating 90\% credibility or occurren
 (optional) how many levels of the hierarchy should be plotted (NA means to plot all levels).
 }
   \item{plot.val}{
-(optional) plot value as a vertical line within the box.
+(optional) plot value (for hierarchy without uncertainty) or median (for hierarchy with uncertainty) as a vertical line within the box.
 }
   \item{col.val}{
-(optional) color of the vertical line indicating the value within the box (default black).
+(optional) color of the vertical line indicating the value or median within the box (default black).
 }
   \item{lwd.val}{
-(optional) line width of the vertical line indicating the value within the box (default 1).
+(optional) line width of the vertical line indicating the value or median within the box (default 1).
 }
   \item{print.val}{
 (optional) print value as a number when plotting a table of boxes.

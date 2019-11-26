@@ -63,8 +63,8 @@ utility.endnode.plot1d <-
    
    # axes (should overly colored bar):
    
-   axis(side=1)
-   axis(side=2)
+   axis(side=1,...)
+   axis(side=2,...)
    
    # plot gridlines:
    
@@ -214,8 +214,8 @@ utility.aggregation.plot <- function(node           = node,
       
       # axes (should overly colored bar):
       
-      axis(1)
-      axis(2)
+      axis(1,...)
+      axis(2,...)
       lines(c(1,1,0),c(0,1,1))
       
       # contour lines:
@@ -329,7 +329,7 @@ utility.plotcolbox <- function(x,y,col,val=NA,plot.val=FALSE,col.val="black",lwd
 }
 
 
-utility.plotquantbox <- function(x,y,col,val,num.stripes=500)
+utility.plotquantbox <- function(x,y,col,val,num.stripes=500,plot.val=TRUE,col.val="black",lwd.val=1.5)
 {
   min.halfwidth <- 0.02
   
@@ -356,7 +356,7 @@ utility.plotquantbox <- function(x,y,col,val,num.stripes=500)
   
   # plot median line:
   
-  lines((x[1]+quant[2]*(x[2]-x[1]))*c(1,1),y,lwd=1.5)
+  if ( plot.val ) lines((x[1]+quant[2]*(x[2]-x[1]))*c(1,1),y,col=col.val,lwd=lwd.val,lend=1)
   
   # return:
   
@@ -579,13 +579,16 @@ utility.plothierarchy <-
                   val <- u.local[,rownames(str)[i]]
                   if ( !uref.available )
                   {
-                    utility.plotquantbox(x,y,col,val)
+                    utility.plotquantbox(x,y,col,val,num.stripes=500,
+                                         plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
                   }
                   else
                   {
                     valref <- uref.local[,rownames(str)[i]]
-                    utility.plotquantbox(x,y1,col,valref)
-                    utility.plotquantbox(x,y2,col,val)
+                    utility.plotquantbox(x,y1,col,valref,num.stripes=500,
+                                         plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
+                    utility.plotquantbox(x,y2,col,val,num.stripes=500,
+                                         plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
                   }                 
                }
                else   # plot expected utility
@@ -883,7 +886,8 @@ utility.plottable <-
                 !is.na(match(nodes[j],colnames(u[[reaches[i]]]))) )
            {
              val <- u[[reaches[i]]][,nodes[j]]
-             utility.plotquantbox(xbox,yb,col,val,num.stripes=500)
+             utility.plotquantbox(xbox,yb,col,val,num.stripes=500,
+                                  plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
            }
            if ( uref.available )
            {
@@ -891,7 +895,8 @@ utility.plottable <-
              val <- uref.local[[ind.uref[i]]][,nodes[j]]
              if ( length(val) > 1 )
              {
-               utility.plotquantbox(xbox,yb,col,val,num.stripes=500)
+               utility.plotquantbox(xbox,yb,col,val,num.stripes=500,
+                                    plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
              }
            }
          }

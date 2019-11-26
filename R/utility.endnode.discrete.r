@@ -317,7 +317,7 @@ plot.utility.endnode.discrete <-
       labels[i] <- paste(as.character(n$attrib.levels[i,]),collapse=",")
     }
     axis(side=1,at=((1:length(n$u))-0.5)/length(n$u),labels=labels)
-    axis(side=2)
+    axis(side=2,...)
     
     # plot gridlines:
     
