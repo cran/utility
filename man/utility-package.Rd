@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab utility\cr
 Type: \tab Package\cr
-Version: \tab 1.4.4\cr
-Date: \tab 2019-11-26\cr
+Version: \tab 1.4.5\cr
+Date: \tab 2020-03-09\cr
 License: \tab GPL-3\cr
 }
 An objective hierarchy and an associated value or utility function 
@@ -365,7 +365,7 @@ plot(morphol,u=res_channelized_add)
 plot(morphol,u=res_rehab)
 plot(morphol,u=res_rehab,uref=res_channelized)
 plot(morphol,u=res_both,type="table",plot.val=FALSE)
-plot(morphol,u=res_both,type="table",plot.val=FALSE,print.val=FALSE)
+plot(morphol,u=res_both,type="table",plot.val=TRUE,print.val=FALSE)
 plot(morphol,u=res_both,uref=res_channelized,type="table",plot.val=FALSE)
 
 # consideration of uncertain attribute levels 

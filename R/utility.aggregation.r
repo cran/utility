@@ -305,6 +305,7 @@ plot.utility.aggregation <-
            lwd.val     = 1,
            print.val   = TRUE,
            two.lines   = FALSE,
+           ticks       = c(0,0.2,0.4,0.6,0.8,1),
            ...)
 {
     node <- x
@@ -329,6 +330,7 @@ plot.utility.aggregation <-
                  lwd.val     = lwd.val,
                  print.val   = print.val,
                  two.lines   = two.lines,
+                 ticks       = ticks,
                  ...)
   }
 

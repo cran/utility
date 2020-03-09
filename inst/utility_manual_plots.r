@@ -399,7 +399,7 @@ AddPowerAggregation2 <- utility.aggregation.create(
   name.fun  = "utility.aggregate.addpower", 
   par       = c(1,1,0.5))
 AddPowerAggregation3 <- utility.aggregation.create(
-  name.node = "Add. Power Aggregation (w1=0.25,w2=0.75,a=2)", 
+  name.node = "Add. Power Aggreg. (w1=0.25,w2=0.75,a=0.5)", 
   nodes     = list(obj1,obj2),
   name.fun  = "utility.aggregate.addpower", 
   par       = c(1,3,0.5))
@@ -413,7 +413,7 @@ pdf(paste(dir.fig,"aggregationaddpower.pdf",sep="/"),width=pdf.width2,height=pdf
 par(mfrow=c(2,2),mar=pdf.mar)
 plot(AddPowerAggregation1,type="nodes",node="Additive Power Aggregation (w1=w2=0.5,a=2)")
 plot(AddPowerAggregation2,type="nodes",node="Additive Power Aggregation (w1=w2=0.5,a=0.5)")
-plot(AddPowerAggregation3,type="nodes",node="Add. Power Aggregation (w1=0.25,w2=0.75,a=2)")
+plot(AddPowerAggregation3,type="nodes",node="Add. Power Aggreg. (w1=0.25,w2=0.75,a=0.5)")
 plot(AddPowerAggregation4,type="nodes",node="Add. Power Aggregation (w1=0.25,w2=0.75,a=0.5)")
 dev.off()
 
@@ -421,7 +421,7 @@ png(paste(dir.fig,"aggregationaddpower.png",sep="/"),width=png.width2,height=png
 par(mfrow=c(2,2),mar=png.mar)
 plot(AddPowerAggregation1,type="nodes",node="Additive Power Aggregation (w1=w2=0.5,a=2)")
 plot(AddPowerAggregation2,type="nodes",node="Additive Power Aggregation (w1=w2=0.5,a=0.5)")
-plot(AddPowerAggregation3,type="nodes",node="Add. Power Aggregation (w1=0.25,w2=0.75,a=2)")
+plot(AddPowerAggregation3,type="nodes",node="Add. Power Aggreg. (w1=0.25,w2=0.75,a=0.5)")
 plot(AddPowerAggregation4,type="nodes",node="Add. Power Aggregation (w1=0.25,w2=0.75,a=0.5)")
 dev.off()
 

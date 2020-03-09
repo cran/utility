@@ -30,6 +30,7 @@ Plot node definition or underlying objective hierarchy.
      lwd.val     = 1,
      print.val   = TRUE,
      two.lines   = FALSE,
+     ticks       = c(0,0.2,0.4,0.6,0.8,1),
      ...)
 }
 
@@ -142,6 +143,9 @@ Otherwise, the medians and colored boxes indicating 90\% credibility or occurren
 }
   \item{two.lines}{
 (optional) choose whether two lines should be used for the labels in the hierarchy plot.
+}
+  \item{ticks}{
+(optional) positions of tick marks for hierarchy and table plots (NA or numeric(0) avoids tick marks).
 }
   \item{\dots}{
 additional arguments passed to the R plotting routine.

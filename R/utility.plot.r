@@ -3,7 +3,7 @@
 # utility and value function package                                           #
 # ==================================                                           #
 #                                                                              #
-# version 1.4.3                                      Peter Reichert 20.09.2018 #
+# version 1.4.5                                      Peter Reichert 08.03.2020 #
 #                                                                              #
 ################################################################################
 
@@ -304,7 +304,13 @@ utility.aggregation.plot <- function(node           = node,
 }
 
 
-utility.plotcolbox <- function(x,y,col,val=NA,plot.val=FALSE,col.val="black",lwd.val=1)
+utility.plotcolbox <- function(x,y,col,
+                               val      = NA,
+                               plot.val = FALSE,
+                               col.val  = "black",
+                               lwd.val  = 1,
+                               ticks    = numeric(0),
+                               tcl      = 0.1)
 {
   # check for availability of data:
   
@@ -326,10 +332,31 @@ utility.plotcolbox <- function(x,y,col,val=NA,plot.val=FALSE,col.val="black",lwd
   {
     lines((x[1]+val[1]*(x[2]-x[1]))*c(1,1),y,lwd=lwd.val,col=col.val,lend=1)
   }
+  
+  # optionally plot tick marks:
+  
+  if( sum(!is.na(ticks)) > 0 )
+  {
+    for( i in 1:length(ticks) )
+    {
+      if ( !is.na(ticks[i]) )
+      {
+        if ( ticks[i]>=0 & ticks[i]<=1 ) lines((x[1]+ticks[i]*(x[2]-x[1]))*c(1,1),c(y[1],y[1]-tcl*(y[2]-y[1])),lend=1)
+      }
+    }
+  }
+  
+  return()
 }
 
 
-utility.plotquantbox <- function(x,y,col,val,num.stripes=500,plot.val=TRUE,col.val="black",lwd.val=1.5)
+utility.plotquantbox <- function(x,y,col,val,
+                                 num.stripes = 500,
+                                 plot.val    = TRUE,
+                                 col.val     = "black",
+                                 lwd.val     = 1.5,
+                                 ticks       = numeric(0),
+                                 tcl         = 0.1)
 {
   min.halfwidth <- 0.02
   
@@ -358,7 +385,18 @@ utility.plotquantbox <- function(x,y,col,val,num.stripes=500,plot.val=TRUE,col.v
   
   if ( plot.val ) lines((x[1]+quant[2]*(x[2]-x[1]))*c(1,1),y,col=col.val,lwd=lwd.val,lend=1)
   
-  # return:
+  # optionally plot tick marks:
+  
+  if( sum(!is.na(ticks)) > 0 )
+  {
+    for( i in 1:length(ticks) )
+    {
+      if ( !is.na(ticks[i]) )
+      {
+        if ( ticks[i]>=0 & ticks[i]<=1 ) lines((x[1]+ticks[i]*(x[2]-x[1]))*c(1,1),c(y[1],y[1]-tcl*(y[2]-y[1])),lend=1)
+      }
+    }
+  }
   
   return()
 }
@@ -379,6 +417,7 @@ utility.plothierarchy <-
             col.val     = "black",
             lwd.val     = 1,
             two.lines   = FALSE,
+            ticks       = numeric(0),
             ...)
 {
    # call multiple times if u and possibly uref are lists:
@@ -405,6 +444,7 @@ utility.plothierarchy <-
                                      col.val     = col.val,
                                      lwd.val     = lwd.val,
                                      two.lines   = two.lines,
+                                     ticks       = ticks,
                                      ...)
             }
          }
@@ -429,6 +469,7 @@ utility.plothierarchy <-
                               col.val     = col.val,
                               lwd.val     = lwd.val,
                               two.lines   = two.lines,
+                              ticks       = ticks,
                               ...)
       }
       return()
@@ -439,7 +480,9 @@ utility.plothierarchy <-
    delta.x        <- 0.1
    delta.y        <- 0.1
    dh.rel.utility <- 0.1
-
+   tcl            <- 0.15
+   ticks.cond     <- ticks; if ( !plot.val ) ticks.cond <- numeric(0)
+   
    # get hierarchy structure and define positions of boxes:
          
    str <- utility.structure(node)
@@ -531,6 +574,16 @@ utility.plothierarchy <-
          }
          text(x.l,y,"0",pos=1,cex=cex.nodes)
          text(x.r,y,"1",pos=1,cex=cex.nodes)
+         if ( sum(!is.na(ticks.cond)) > 0 )
+         {
+           for( i in 1:length(ticks) )
+           {
+             if ( !is.na(ticks[i]) )
+             {
+               if ( ticks[i]>=0 & ticks[i]<=1 ) lines((x.l+ticks.cond[i]*(x.r-x.l))*c(1,1),y+0.5*tcl*h*c(-1,1),lend=1)
+             }
+           }
+         }
       }
       
       # loop over all boxes in the hierarchy:
@@ -563,13 +616,13 @@ utility.plothierarchy <-
                if ( str$utility[i] ) color <- "white"
                if ( !uref.available )
                {
-                 utility.plotcolbox(x,y,color,val,plot.val,col.val,lwd.val)
+                 utility.plotcolbox(x,y,color,val,plot.val,col.val,lwd.val,ticks=ticks.cond,tcl=tcl)
                }
                else
                {
                  valref <- uref.local[ind.uref.local[k],rownames(str)[i]]
                  utility.plotcolbox(x,y1,color,valref,plot.val,col.val,lwd.val)
-                 utility.plotcolbox(x,y2,color,val,plot.val,col.val,lwd.val)                 
+                 utility.plotcolbox(x,y2,color,val,plot.val,col.val,lwd.val,ticks=ticks.cond,tcl=2*tcl)                 
                }
             }
             else # plot quantile summary of v or expected u
@@ -580,7 +633,7 @@ utility.plothierarchy <-
                   if ( !uref.available )
                   {
                     utility.plotquantbox(x,y,col,val,num.stripes=500,
-                                         plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
+                                         plot.val=plot.val,col.val=col.val,lwd.val=lwd.val,ticks=ticks,tcl=tcl)
                   }
                   else
                   {
@@ -588,7 +641,7 @@ utility.plothierarchy <-
                     utility.plotquantbox(x,y1,col,valref,num.stripes=500,
                                          plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
                     utility.plotquantbox(x,y2,col,val,num.stripes=500,
-                                         plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
+                                         plot.val=plot.val,col.val=col.val,lwd.val=lwd.val,ticks=ticks,tcl=2*tcl)
                   }                 
                }
                else   # plot expected utility
@@ -619,7 +672,7 @@ utility.plothierarchy <-
                       col2 <- "lightgreen"
                     }
                     utility.plotcolbox(x,y1,col1,uref.exp)
-                    utility.plotcolbox(x,y2,col2,u.exp)                    
+                    utility.plotcolbox(x,y2,col2,u.exp,ticks=ticks,tcl=2*tcl)                    
                   }
                }
             }
@@ -721,6 +774,7 @@ utility.plottable <-
             col.val    = "black",
             lwd.val    = 1,
             print.val  = TRUE,
+            ticks      = numeric(0),
             ...)
 {
    # global parameters:
@@ -729,6 +783,8 @@ utility.plottable <-
    delta.y        <- 0.2
    delta.main     <- 0.05
    dh.rel.utility <- 0.1
+   tcl            <- 0.1
+   ticks.cond     <- ticks; if ( !plot.val ) ticks.cond <- numeric(0)
    
    # initializations:
    
@@ -841,7 +897,9 @@ utility.plottable <-
              {
                if ( str[nodes[j],"utility"] ) color <- "white"
              }
-             utility.plotcolbox(xbox,yb,color,val=val,plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
+             tcl.loc <- tcl; if ( uref.available ) tcl.loc <- 2*tcl
+             utility.plotcolbox(xbox,yb,color,val=val,plot.val=plot.val,col.val=col.val,lwd.val=lwd.val,
+                                ticks=ticks.cond,tcl=tcl.loc)
              if ( !is.na(val) & print.val )
              {
                val.str <- paste(round(val,2))
@@ -886,8 +944,10 @@ utility.plottable <-
                 !is.na(match(nodes[j],colnames(u[[reaches[i]]]))) )
            {
              val <- u[[reaches[i]]][,nodes[j]]
+             tcl.loc <- tcl; if ( uref.available ) tcl.loc <- 2*tcl
              utility.plotquantbox(xbox,yb,col,val,num.stripes=500,
-                                  plot.val=plot.val,col.val=col.val,lwd.val=lwd.val)
+                                  plot.val=plot.val,col.val=col.val,lwd.val=lwd.val,
+                                  ticks=ticks,tcl=tcl.loc)
            }
            if ( uref.available )
            {
@@ -959,6 +1019,7 @@ utility.plot <- function(node,
                          lwd.val     = 1,
                          print.val   = TRUE,
                          two.lines   = FALSE,
+                         ticks       = c(0,0.2,0.4,0.6,0.8,1),
                          ...)
 {
    if ( type[1] == "nodes" | type[1] == "node" )
@@ -1094,6 +1155,7 @@ utility.plot <- function(node,
                                   col.val     = col.val,
                                   lwd.val     = lwd.val,
                                   two.lines   = two.lines,
+                                  ticks       = ticks,
                                   ...)
          }
          if ( ! is.na(nodes[1]) )
@@ -1115,6 +1177,7 @@ utility.plot <- function(node,
                                cex.attrib  = cex.attrib,
                                with.attrib = with.attrib,
                                two.lines   = two.lines,
+                               ticks       = ticks,
                                ...)
                 } 
             }
@@ -1139,6 +1202,7 @@ utility.plot <- function(node,
                              col.val    = col.val,
                              lwd.val    = lwd.val,
                              print.val  = print.val,
+                             ticks      = ticks,
                              ...)
          }
          else
