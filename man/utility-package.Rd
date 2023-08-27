@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab utility\cr
 Type: \tab Package\cr
-Version: \tab 1.4.5\cr
-Date: \tab 2020-03-09\cr
+Version: \tab 1.4.6\cr
+Date: \tab 2023-08-27\cr
 License: \tab GPL-3\cr
 }
 An objective hierarchy and an associated value or utility function 
@@ -143,10 +143,10 @@ to check advanced attributes.
 }
 
 \author{
-Peter Reichert <peter.reichert@eawag.ch> 
+Peter Reichert <peter.reichert@emeriti.eawag.ch> 
 with contributions by Nele Schuwirth <nele.schuwirth@eawag.ch>
 
-Maintainer: Peter Reichert <peter.reichert@eawag.ch>
+Maintainer: Peter Reichert <peter.reichert@emeriti.eawag.ch>
 }
 
 \references{

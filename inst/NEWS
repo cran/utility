@@ -3,6 +3,15 @@ Modification history of utility package
 =======================================
 
 
+Changes version 1.4.5 (03.03.2020) -> version 1.4.6 (27.08.2023)
+================================================================
+
+PR: author and maintainer email address updated from peter.reichert@emeriti.eawag.ch
+    to peter.reichert@emeriti.eawag.ch
+
+PR: various updates to new requirements from newer R version (4.3.1)
+
+
 Changes version 1.4.4 (26.11.2019) -> version 1.4.5 (09.03.2020)
 ================================================================
 

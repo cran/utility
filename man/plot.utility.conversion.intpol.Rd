@@ -158,7 +158,7 @@ Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Be
 }
 
 \author{
-Peter Reichert <peter.reichert@eawag.ch>
+Peter Reichert <peter.reichert@emeriti.eawag.ch>
 }
 
 \seealso{

@@ -1,10 +1,10 @@
 citHeader("To cite package 'utility' in publications use:")
 
-citEntry(entry="Article",
+bibentry(bibtype="Article",
   title = "Constructing, Evaluating and Visualizing Value and Utility Functions for Decision Support",
-  author = personList(as.person("Peter Reichert"), 
-                      as.person("Nele Schuwirth"), 
-                      as.person("Simone Langhans")),
+  author = c(person("Peter","Reichert"), 
+             person("Nele","Schuwirth"), 
+             person("Simone","Langhans")),
   journal =	"Environmental Modelling and Software",
   volume = "46",
   pages = "283--291",

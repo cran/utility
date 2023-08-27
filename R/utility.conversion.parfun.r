@@ -114,7 +114,7 @@ updatepar.utility.conversion.parfun <- function(x,par=NA,...)
 # evaluate values or utilities:
 # -----------------------------
 
-evaluate.cond.utility.conversion.parfun <- function(x,v,...)
+evaluate_utility.conversion.parfun <- function(x,v)
 {
   node <- x
   u <- do.call(node$name.fun,list(v,node$par))
@@ -140,7 +140,7 @@ evaluate.utility.conversion.parfun <- function(x,
   {
     v <- as.data.frame(v)
   }
-  u <- evaluate.cond(n,v[,1])
+  u <- evaluate_utility.conversion.parfun(n,v[,1])
   u <- as.data.frame(u)
   names(u) <- n$name
   ind <- !is.na(u) & (u<0 | u>1)

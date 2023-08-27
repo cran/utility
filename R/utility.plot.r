@@ -137,7 +137,21 @@ utility.conversion.plot <- function(node,
 {
    length <- 101
    x <- ((1:length)-1)/(length-1)
-   u <- evaluate.cond(node,x)
+   if ( class(node)[1] == "utility.conversion.intpol" )
+   {
+      u <- evaluate_utility.conversion.intpol(node,x)
+   }
+   else
+   {
+      if ( class(node)[1] == "utility.conversion.parfun" )
+      {
+         u <- evaluate_utility.conversion.parfun(node,x)
+      }
+      else
+      {
+         u <- NA
+      }
+   }
    plot(numeric(0),numeric(0),type="l",
         xlim=c(0,1),ylim=c(0,1),
         xlab=paste("value(",node$nodes[[1]]$name,")",sep=""),ylab="utility",
@@ -1028,7 +1042,7 @@ utility.plot <- function(node,
       
       if ( is.na(nodes[1]) | ! is.na(match(node$name,nodes)) )
       {
-         if ( substring(class(node),1,18) == "utility.conversion" )
+         if ( substring(class(node)[1],1,18) == "utility.conversion" )
          {
             utility.conversion.plot(node       = node,
                                     col        = col,
@@ -1040,7 +1054,7 @@ utility.plot <- function(node,
          }
          else
          {
-            if ( substring(class(node),1,19) == "utility.aggregation" )
+            if ( substring(class(node)[1],1,19) == "utility.aggregation" )
             {
                utility.aggregation.plot(node       = node,
                                         col        = col,
@@ -1054,7 +1068,7 @@ utility.plot <- function(node,
             {
                if ( node$type == "endnode" )
                {
-                  if ( class(node) == "utility.endnode.cond" )
+                  if ( class(node)[1] == "utility.endnode.cond" )
                   {
                     plot(node$nodes[[i]],
                           par       = NA,
@@ -1094,7 +1108,7 @@ utility.plot <- function(node,
 
             if ( node$nodes[[i]]$type == "endnode" )
             {
-              if ( class(node$nodes[[i]]) == "utility.endnode.cond" )
+              if ( class(node$nodes[[i]])[1] == "utility.endnode.cond" )
               {
                 plot(node$nodes[[i]],
                      par       = NA,

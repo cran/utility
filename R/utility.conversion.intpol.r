@@ -142,7 +142,7 @@ updatepar.utility.conversion.intpol <- function(x,par=NA,...)
 # evaluate values or utilities:
 # -----------------------------
 
-evaluate.cond.utility.conversion.intpol <- function(x,v,...)
+evaluate_utility.conversion.intpol <- function(x,v)
 {
   node <- x
   u <- approx(x=node$x,y=node$u,xout=v)$y
@@ -168,7 +168,7 @@ evaluate.utility.conversion.intpol <- function(x,
   {
     v <- as.data.frame(v)
   }
-  u <- evaluate.cond(n,v[,1])
+  u <- evaluate_utility.conversion.intpol(n,v[,1])
   ind <- !is.na(u) & (u<0 | u>1)
   if ( sum(ind) > 0 )
   {

@@ -15,7 +15,6 @@
 
 updatepar     <- function(x, ...) UseMethod("updatepar")
 evaluate      <- function(x, ...) UseMethod("evaluate")
-evaluate.cond <- function(x, ...) UseMethod("evaluate.cond")
 
 # in addition, we support the functions plot, print and summary
 
