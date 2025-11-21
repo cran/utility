@@ -33,7 +33,7 @@ for \eqn{k} and then calculate the aggregated value as
 \deqn{u = \frac{\displaystyle \prod_{i=1}^n (1 + k w_i u_i)}{k}}{u = (prod(1 + k ki  ui) - 1) / k}
 See Keeney and Raiffa, Decisions with multiple objectives, 1976, pp. 307, 347-348 for details.\cr
 The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case:\cr
-\if{html}{\figure{aggregationmult.png}{options: width=80\%}}
+\if{html}{\figure{aggregationmult.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationmult.pdf}{options: width=5in}}
 }
 

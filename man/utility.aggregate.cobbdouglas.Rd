@@ -34,7 +34,7 @@ The function returns the aggregated value or utility.
 The aggregation function is defined by
 \deqn{u = \prod_{i=1}^n u_i^{w_i}}{u = prod ui^wi}
 The following figure shows examples of the behaviour of this aggregation function and its generalization to \code{\link{utility.aggregate.geooff}} for the two-dimensional case:\cr
-\if{html}{\figure{aggregationgeo.png}{options: width=80\%}}
+\if{html}{\figure{aggregationgeo.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationgeo.pdf}{options: width=5in}}
 }
 

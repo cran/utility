@@ -35,7 +35,7 @@ of \code{u}.
 The aggregation function is defined by
 \deqn{u = \sum_{i=1}^n w_i u_i}{u = sum wi ui}
 The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case:\cr
-\if{html}{\figure{aggregationadd.png}{options: width=80\%}}
+\if{html}{\figure{aggregationadd.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationadd.pdf}{options: width=5in}}
 }
 

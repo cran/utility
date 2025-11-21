@@ -35,7 +35,7 @@ The function returns the aggregated value or utility.
 The aggregation function is defined by
 \deqn{u = 1 - \prod_{i=1}^n (1-u_i)^{w_i}}{u = 1 - prod (1-ui)^wi}
 The following figure shows examples of the behaviour of this aggregation function and its generalization to \code{\link{utility.aggregate.revgeooff}} for the two-dimensional case:\cr
-\if{html}{\figure{aggregationrevgeo.png}{options: width=80\%}}
+\if{html}{\figure{aggregationrevgeo.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationrevgeo.pdf}{options: width=5in}}
 }
 

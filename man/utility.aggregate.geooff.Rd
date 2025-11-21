@@ -38,7 +38,7 @@ The aggregation function is defined by
 \deqn{u = \prod_{i=1}^n (u_i+\delta)^{w_i} - \delta}{u = prod (ui+delta)^wi - delta}
 where \eqn{\delta}{delta} is the last parameter appended to the weights.\cr
 The following figure shows examples of the behaviour of this aggregation function and its special case \code{\link{utility.aggregate.geo}} for the two-dimensional case:\cr
-\if{html}{\figure{aggregationgeo.png}{options: width=80\%}}
+\if{html}{\figure{aggregationgeo.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationgeo.pdf}{options: width=5in}}
 }
 

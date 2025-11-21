@@ -3,6 +3,13 @@ Modification history of utility package
 =======================================
 
 
+Changes version 1.4.6 (27.08.2023) -> version 1.4.7 (20.11.2025)
+================================================================
+
+PR: minor formal changes to DESCRIPTION and .Rd files
+    to remain compatible with new CRAN requirements
+
+
 Changes version 1.4.5 (03.03.2020) -> version 1.4.6 (27.08.2023)
 ================================================================
 

@@ -34,7 +34,7 @@ The function returns the aggregated value or utility.
 The aggregation function is defined by
 \deqn{u = \frac{1}{\displaystyle \sum_{i=1}^n \frac{w_i}{u_i}}}{u = 1 / ( sum wi/ui )}
 The following figure shows examples of the behaviour of this aggregation function and its generalization to \code{\link{utility.aggregate.harmooff}} for the two-dimensional case:\cr
-\if{html}{\figure{aggregationharmo.png}{options: width=80\%}}
+\if{html}{\figure{aggregationharmo.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationharmo.pdf}{options: width=5in}}
 }
 

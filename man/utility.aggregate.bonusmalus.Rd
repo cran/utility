@@ -50,7 +50,7 @@ The function returns the aggregated value or utility.
 The aggregation function is defined by
 \deqn{u = \frac{\displaystyle u^{\mathrm{agg}}_{i \notin b,i \notin m} + \sum_{\begin{array}{l}i \in b \wedge u_i > u^{\mathrm{agg}}_{i \notin b,i \notin m}\\i \in m \wedge u_i < u^{\mathrm{agg}}_{i \notin b,i \notin m}\end{array}}\mid w_i \mid u_i}{\displaystyle 1 + \sum_{\begin{array}{l}i \in b \wedge u_i > u^{\mathrm{agg}}_{i \notin b,i \notin m}\\i \in m \wedge u_i < u^{\mathrm{agg}}_{i \notin b,i \notin m}\end{array}}\mid w_i \mid}}{u = additive aggregation between the aggregation result of the values or utilities of the non-bonus and non-malus sub-objectives and the values of bonus sub-objectives that are larger than this aggregated value, and the values of malus sub-objectives that are smaller than the aggregated value}
 The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case:\cr
-\if{html}{\figure{aggregationbonusmalus.png}{options: width=80\%}}
+\if{html}{\figure{aggregationbonusmalus.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationbonusmalus.pdf}{options: width=5in}}
 }
 

@@ -28,7 +28,7 @@ minimum of the components of \code{u}.
 The aggregation function is defined by
 \deqn{u = \min_{i=1}^n u_i}{u = min ui}
 The following figure shows the behaviour of this aggregation function for the two-dimensional case:\cr
-\if{html}{\figure{aggregationmin.png}{options: width=40\%}}
+\if{html}{\figure{aggregationmin.png}{options: style="width: 40\%;"}}
 \if{latex}{\figure{aggregationmin.pdf}{options: width=2.5in}}
 }
 

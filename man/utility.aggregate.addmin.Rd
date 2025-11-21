@@ -44,7 +44,7 @@ The aggregation function is a mixture of the functions
 \code{\link{utility.aggregate.add}} and
 \code{\link{utility.aggregate.min}}.
 The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case:\cr
-\if{html}{\figure{aggregationaddmin.png}{options: width=80\%}}
+\if{html}{\figure{aggregationaddmin.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationaddmin.pdf}{options: width=5in}}
 }
 

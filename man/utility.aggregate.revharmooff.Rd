@@ -36,7 +36,7 @@ The aggregation function is defined by
 \deqn{u = 1 - \frac{1}{\displaystyle \sum_{i=1}^n \frac{w_i}{1-u_i+\delta}} + \delta}{u = 1 - 1 / ( sum wi/(1-ui+delta) ) + delta}
 where \eqn{\delta}{delta} is the last parameter appended to the weights.\cr
 The following figure shows examples of the behaviour of this aggregation function and its special case \code{\link{utility.aggregate.revharmo}} for the two-dimensional case:\cr
-\if{html}{\figure{aggregationrevharmo.png}{options: width=80\%}}
+\if{html}{\figure{aggregationrevharmo.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationrevharmo.pdf}{options: width=5in}}
 }
 

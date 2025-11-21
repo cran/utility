@@ -33,7 +33,7 @@ The aggregation function is defined by
 \deqn{u = \left( \sum_{i=1}^n w_i u_i^{\alpha} \right)^{1/{\alpha}}}{u = ( sum wi ui^alpha )^(1/alpha)}
 where \eqn{\alpha}{alpha} is the last parameter appended to the weights.\cr
 The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case:\cr
-\if{html}{\figure{aggregationaddpower.png}{options: width=80\%}}
+\if{html}{\figure{aggregationaddpower.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationaddpower.pdf}{options: width=5in}}
 }
 

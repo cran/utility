@@ -39,7 +39,7 @@ The aggregation function is a mixture of the functions
 \code{\link{utility.aggregate.min}}, and
 \code{\link{utility.aggregate.geo}}.
 The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case:\cr
-\if{html}{\figure{aggregationmix.png}{options: width=80\%}}
+\if{html}{\figure{aggregationmix.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationmix.pdf}{options: width=5in}}
 }
 

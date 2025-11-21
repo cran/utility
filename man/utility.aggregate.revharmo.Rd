@@ -35,7 +35,7 @@ The function returns the aggregated value or utility.
 The aggregation function is defined by
 \deqn{u = 1 - \frac{1}{\displaystyle \sum_{i=1}^n \frac{w_i}{1-u_i}}}{u = 1 - 1 / ( sum wi/(1-ui) )}
 The following figure shows examples of the behaviour of this aggregation function and its generalization to \code{\link{utility.aggregate.revharmooff}} for the two-dimensional case:\cr
-\if{html}{\figure{aggregationrevharmo.png}{options: width=80\%}}
+\if{html}{\figure{aggregationrevharmo.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationrevharmo.pdf}{options: width=5in}}
 }
 

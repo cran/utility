@@ -14,11 +14,11 @@
 \tabular{ll}{
 Package: \tab utility\cr
 Type: \tab Package\cr
-Version: \tab 1.4.6\cr
-Date: \tab 2023-08-27\cr
+Version: \tab 1.4.7\cr
+Date: \tab 2025-11-20\cr
 License: \tab GPL-3\cr
 }
-An objective hierarchy and an associated value or utility function 
+An objectives hierarchy and an associated value or utility function 
 is constructed by constructing the nodes of the hierarchy starting 
 from the end nodes and proceeding to the higher hierarchies.
 Five types of end nodes are distinguished:
@@ -158,7 +158,10 @@ Keeney, R. L. and Raiffa, H. Decisions with Multiple Objectives - Preferences an
 Eisenfuehr, F., Weber, M. and Langer, T., Rational Decision Making, Springer, Berlin, 2010.
 }
 
-\keyword{decision analysis; objectives hierarchy; value function; utility function}
+\keyword{decision analysis}
+\keyword{objectives hierarchy}
+\keyword{value function}
+\keyword{utility function}
 
 \examples{
 # define discrete end node for width variability

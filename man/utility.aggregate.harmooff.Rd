@@ -38,7 +38,7 @@ The aggregation function is defined by
 \deqn{u = \frac{1}{\displaystyle \sum_{i=1}^n \frac{w_i}{u_i+\delta}} - \delta}{u = 1 / ( sum wi/(ui+delta) ) - delta}
 where \eqn{\delta}{delta} is the last parameter appended to the weights.\cr
 The following figure shows examples of the behaviour of this aggregation function and its special case \code{\link{utility.aggregate.harmo}} for the two-dimensional case:\cr
-\if{html}{\figure{aggregationharmo.png}{options: width=80\%}}
+\if{html}{\figure{aggregationharmo.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationharmo.pdf}{options: width=5in}}
 }
 

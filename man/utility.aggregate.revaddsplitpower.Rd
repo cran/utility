@@ -36,7 +36,7 @@ with
 \deqn{g^{-1}(v) = \left\{ \begin{array}{ll} s \left( \displaystyle \frac{v}{s} \right)^{1/\alpha} & \mbox{for } v \le s\\ 1 - (1-s) \left( \displaystyle \frac{1-v}{1-s} \right)^{1/\alpha} & \mbox{for } v \ge s \end{array} \right.}{g^(-1)(v) = s (v/s)^(1-alpha) for v <= s; 1 - (1-s) ((1-v)/(1-s))^(1-alpha) for v >= s}
 where \eqn{\alpha}{alpha} and \eqn{s}{s} are the two last parameters appended to the weights.\cr
 The following figure shows examples of the behaviour of this aggregation function for the two-dimensional case (the split parameter, \eqn{s}, is chosen to be 1/2 in all four plots):\cr
-\if{html}{\figure{aggregationrevaddsplitpower.png}{options: width=80\%}}
+\if{html}{\figure{aggregationrevaddsplitpower.png}{options: style="width: 80\%;"}}
 \if{latex}{\figure{aggregationrevaddsplitpower.pdf}{options: width=5in}}
 }
 
